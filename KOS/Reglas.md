@@ -43,6 +43,18 @@ qué pidió alguien, fechas, husos horarios, qué existe en una herramienta.
   Perceptyx (Pyxee-CVO) dijo *"no sé"* qué es CSP; Ignacio sugirió *"Customer Support something"* y el bot
   devolvió *"Customer Success Partner"* citando una transcripción **en la que la sigla no aparece**. Una
   cita no prueba nada hasta abrirla: chequear que la fuente contenga lo que el bot dice que contiene.
+- **Si no está en el vault, se pregunta: no se completa** (Ignacio, 2026-10-17, para **cualquier IA** que opere el
+  vault). Cuando una respuesta necesita un dato o un procedimiento que el vault no tiene:
+  - se dice qué falta y se pregunta **antes** de proponer pasos que dependan de eso;
+  - nunca se inventan nombres de columnas, tablas, opciones de un menú o de un diálogo, ni modos de una herramienta. Si
+    hace falta un nombre, se da la query que lo averigua (`information_schema`, `prefill_linkage`, un `SELECT`);
+  - lo que se deduce se marca 🔍 al lado, no al final. Lo que dijo una persona se marca 📣, con quién y cuándo, y no se
+    presenta como regla, *"mandatory"* ni SOP;
+  - una vista generada (HTML, guía, resumen, traducción) **conserva las marcas de la fuente y no sube su certeza**.
+
+  Origen: la prueba de operadores del 16–17/10 ([[KOS/Operadores|Operadores]] § Gemini). Ante un ticket sin
+  procedimiento escrito, un operador inventó columnas (`qid`, `age_band`), opciones de diálogo y un import que habría
+  duplicado a toda la población del survey.
 - **Si la extracción automática falla dos veces, pedir captura** de la parte que falta, no seguir
   intentando. **La maquetación solo se juzga desde un render**: un volcado de texto (pdftotext)
   reordena columnas e inventa defectos que el documento no tiene.
@@ -120,8 +132,26 @@ Dominio abierto el **2026-10-06**. Convención completa en [[Perceptyx/_indice|P
   1. **Primero, las herramientas** que se van a usar —Querious, OnDemand (app), SOS, Excel, LEB…— cada una
      **con su URL** cuando la tiene (tabla en [[Perceptyx/plataforma|plataforma]] § URLs de trabajo).
   2. **Después, los pasos**, con las **queries SQL y fórmulas de Excel listas para copiar**.
-  - **Si pide "paso a paso":** herramientas + **un resumen corto de cómo se va a resolver**, y después
-    **un paso por vez**, esperando el resultado antes del siguiente.
+  - ~~**Si pide "paso a paso":** herramientas + **un resumen corto de cómo se va a resolver**, y después
+    **un paso por vez**, esperando el resultado antes del siguiente.~~ Ampliada el 2026-10-17, abajo.
+- **Antes de dar pasos para un ticket: tres datos y una pregunta** (Ignacio, 2026-10-17, para cualquier IA):
+  1. **Datos del app.** Si no vienen en el pedido ni en lo que pegó Ignacio, preguntar **los tres** antes de proponer
+     nada que escriba en una base:
+     - **survey / app ID**;
+     - **¿se armó en LEB o en Classic?** Decide si LEB pisa lo hecho por fuera (regla 10 de
+       [[Perceptyx/procedimientos|procedimientos]]) y qué vía de carga corresponde;
+     - **¿está activo (en vivo) o cerrado?** La regla 2 pide survey cerrado para tocar demos, y un survey vivo cambia el
+       procedimiento (§ Late adds).
+     Lo que sí vino en el pedido no se vuelve a preguntar (Bootstrap, *Permanent Rules*).
+  2. **Preguntar el modo:** *¿guía paso a paso o completa?*
+     - **Completa:** el formato de arriba. Herramientas con URL, después todos los pasos con SQL y fórmulas listas para
+       copiar.
+     - **Paso a paso:**
+       1. **las herramientas** a usar, con su **URL o ruta** (por ejemplo *Operations tools › Participant Data › Data
+          File Builder*, `rm=survey_launch`);
+       2. **las tablas que se van a tocar y por qué** cada una;
+       3. **un overview** corto de cómo se resuelve, en orden;
+       4. **solo el primer paso**. El siguiente, cuando Ignacio traiga el resultado.
   - Cada paso sale del procedimiento del vault; si hay varias vías, se nombran (regla de las distintas
     formas, arriba) y se dice cuál se propone y por qué.
 - **IA y datos de clientes:** Perceptyx tiene una **lista de clientes con los que no se puede usar GPT**

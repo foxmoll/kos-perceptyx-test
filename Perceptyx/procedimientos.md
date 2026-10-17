@@ -1251,8 +1251,11 @@ que no mapean** (y las vacías). 📣 Elena prefiere hacerlo *antes* del Data Fi
 que sale se importa **uno a uno sin mapear a mano** — *"especially if you have hundreds of columns"*.
 La otra vía (la que hizo primero en la call) es mapear columna por columna en el import de Querious.
 
-Lo que el Data File Builder necesita en las primeras columnas: **first name, last name, email, manager
-ID** (📣).
+~~Lo que el Data File Builder necesita en las primeras columnas: **first name, last name, email, manager
+ID** (📣).~~ Corregido el 16/10, releyendo la transcripción: Elena dijo que el archivo *"does have first name, last name,
+email, and manager ID as first four columns… five columns"*. ✅ En la captura de Excel las primeras cinco eran
+**`emp_id`, `first_name`, `last_name`, `email`, `mgr_id`**. 📣 Lo nombró como la razón de que el builder tomara el
+archivo, pero 🔍 no está claro si el builder **exige** ese orden o si alcanza con que estén las columnas.
 
 ### 3. Antes de cargar: ¿ya están? (el paso que se olvidó en la call)
 
