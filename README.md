@@ -27,3 +27,7 @@ No es fuente de verdad: lo que se aprenda acá vuelve al vault original a mano.
    un ticket real que el vault no cubra. → ¿hace **una sola pregunta por mensaje**, en el orden app ID → LEB/Classic →
    activo/cerrado → paso a paso o completa, salteando lo que ya vino en el pedido? ¿Evita inventar nombres de columnas u
    opciones de menú y marca 🔍 lo que deduce?
+6. **Quién opera** (`KOS/Reglas.md` § 10, ficha en `equipo/`). En una conversación nueva, saludar o pegar un ticket. →
+   ¿corre `git config user.email`? ¿Te encuentra por nombre en `equipo/ignacio.md` y te pide confirmar antes de agregar
+   el email? Para probar el onboarding, cambiar el nombre de git en el clon (`git config user.name "Prueba"`) → ¿pregunta
+   de a una, en el camino, sin frenar el ticket, y muestra la ficha antes de escribirla?

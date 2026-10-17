@@ -47,6 +47,14 @@ Characteristics:
 
 ---
 
+### People (not a knowledge domain)
+
+- `equipo/` — one profile per person who operates the KOS (`equipo/<usuario>.md`): language, default guide mode, level
+  of detail, team, tools. Read at bootstrap to know who is operating. Personal preferences change the *form* of the
+  answers, never the team rules. Schema in `equipo/_esquema.md`; rule in `KOS/Reglas.md` § 10.
+
+---
+
 ### System (not a knowledge domain)
 
 - `KOS/` — the protocol itself: this bootstrap, manifesto, execution kernel, agents, working rules,
@@ -116,6 +124,9 @@ node) — never only in memory, which stays on one machine and in one AI product
 ## Bootstrap sequence
 
 Before performing any work:
+
+0. Identify who is operating: run `git config user.name` and `git config user.email`, find the matching profile in
+   `equipo/` and load it. No match → follow `KOS/Reglas.md` § 10 (conversational onboarding, one question at a time).
 
 1. Adopt the philosophy described in KOS/MANIFESTO.md.
 

@@ -189,6 +189,32 @@ Dominio abierto el **2026-10-06**. Convención completa en [[Perceptyx/_indice|P
 
 ---
 
+## 10. Quién opera y sus preferencias
+
+Regla de Ignacio, 2026-10-17, para el KOS de equipo. Esquema de la ficha: [[equipo/_esquema|equipo/_esquema]].
+
+- **Al arrancar, identificar a quien opera** con `git config user.email` (y `user.name`) y cargar su ficha de `equipo/`. Se
+  busca primero por email y después por nombre. Si aparece por nombre pero el email no está en la ficha, se confirma
+  (*"¿Sos Ignacio Moll?"*) y se agrega el email.
+- **La ficha cambia la forma, nunca el rigor.** Idioma, modo de guía por defecto y nivel de detalle salen de la ficha. Las
+  reglas de § 1, 2 y 9 valen igual para todos: si una ficha dice *"no me preguntes"*, igual se pregunta lo que falta.
+- **Sin ficha: conocer a la persona conversando, no con un formulario.**
+  - **No bloquear el trabajo.** Si la persona llegó con un ticket o una pregunta, se atiende. Las preferencias se averiguan
+    **en el camino**, cuando vienen al caso: el modo de guía, la primera vez que trae un ticket; el nivel de detalle,
+    cuando aparece la primera decisión técnica.
+  - **Una pregunta por mensaje** (§ 1), corta, que se conteste con una palabra. La primera, solo si hace falta: *"No te tengo
+    registrado/a. ¿Cómo te llamás?"*. Si el nombre ya vino en git, no se pregunta.
+  - **Lo que se puede deducir no se pregunta, se anota 🔍:** el idioma, de cómo escribe; la experiencia, de cómo describe el
+    problema. Se confirma más adelante, si vale la pena.
+  - **Mientras no se sepa,** se usa lo más seguro: preguntar el modo de guía en cada ticket y explicar el porqué de cada
+    paso.
+  - **Antes de crear o cambiar la ficha, se muestra y se pide el OK.** Se escribe en `equipo/<usuario>.md` con fecha y
+    fuente por campo, y entra como cualquier cambio al repo: validador y, en el repo del equipo, PR.
+  - **Una vez guardada, no se vuelve a preguntar** lo que ya está. Si la persona pide otra cosa (*"desde ahora, completa"*), se
+    actualiza la ficha y lo anterior se marca `SUPERSEDED (fecha)`.
+
+---
+
 ## Pendiente abierto del KOS
 
 La **rutina de curación** —cuándo y cómo se dispara Reflect sin que Ignacio lo pida— sigue sin
