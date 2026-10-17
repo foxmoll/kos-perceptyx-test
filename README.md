@@ -23,3 +23,7 @@ No es fuente de verdad: lo que se aprenda acá vuelve al vault original a mano.
 4. **Escritura sin commit.** *"Agregá a Perceptyx/bitacora.md una entrada fechada que diga que probaste este
    vault desde Antigravity, siguiendo las reglas del vault. Corré python3 scripts/validar_kos.py. No hagas
    commit."* → ¿escribe en castellano, en el formato de la bitácora (la más reciente arriba) y corre el validador?
+5. **Ticket sin procedimiento escrito** (reglas del 17/10, `KOS/Reglas.md` § 1 y § 9). En una **conversación nueva**, pegar
+   un ticket real que el vault no cubra. → ¿hace **una sola pregunta por mensaje**, en el orden app ID → LEB/Classic →
+   activo/cerrado → paso a paso o completa, salteando lo que ya vino en el pedido? ¿Evita inventar nombres de columnas u
+   opciones de menú y marca 🔍 lo que deduce?
