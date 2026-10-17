@@ -46,6 +46,11 @@ qué pidió alguien, fechas, husos horarios, qué existe en una herramienta.
 - **Si no está en el vault, se pregunta: no se completa** (Ignacio, 2026-10-17, para **cualquier IA** que opere el
   vault). Cuando una respuesta necesita un dato o un procedimiento que el vault no tiene:
   - se dice qué falta y se pregunta **antes** de proponer pasos que dependan de eso;
+  - **de a una pregunta por mensaje** (Ignacio, 2026-10-17: *"no podés hacer una chorrera de preguntas, después
+    comentarios, después más preguntas, no hay una manera cómoda de responder a esto. Las preguntas de a una"*). El mensaje
+    trae una línea de contexto como mucho y **una** pregunta, la que más destraba, que se pueda contestar con una palabra o
+    un dato. La próxima va cuando llega la respuesta. El análisis (qué cubre el vault, qué no, hipótesis) **no se intercala**:
+    va después de las preguntas, o cuando se pida. Es la misma disciplina del régimen Terapeuta (*"one question at a time"*);
   - nunca se inventan nombres de columnas, tablas, opciones de un menú o de un diálogo, ni modos de una herramienta. Si
     hace falta un nombre, se da la query que lo averigua (`information_schema`, `prefill_linkage`, un `SELECT`);
   - lo que se deduce se marca 🔍 al lado, no al final. Lo que dijo una persona se marca 📣, con quién y cuándo, y no se
@@ -134,7 +139,10 @@ Dominio abierto el **2026-10-06**. Convención completa en [[Perceptyx/_indice|P
   2. **Después, los pasos**, con las **queries SQL y fórmulas de Excel listas para copiar**.
   - ~~**Si pide "paso a paso":** herramientas + **un resumen corto de cómo se va a resolver**, y después
     **un paso por vez**, esperando el resultado antes del siguiente.~~ Ampliada el 2026-10-17, abajo.
-- **Antes de dar pasos para un ticket: tres datos y una pregunta** (Ignacio, 2026-10-17, para cualquier IA):
+- **Antes de dar pasos para un ticket: tres datos y una pregunta** (Ignacio, 2026-10-17, para cualquier IA). **Se preguntan
+  de a una, en este orden**, y se saltea lo que ya vino en el pedido (§ 1, *Si no está en el vault, se pregunta*): app ID →
+  ¿LEB o Classic? → ¿activo o cerrado? → ¿paso a paso o completa? → recién después, de a una, lo que falte del ticket
+  (por ejemplo, la descripción de un ticket anterior). El análisis de qué cubre el vault va después, en la guía:
   1. **Datos del app.** Si no vienen en el pedido ni en lo que pegó Ignacio, preguntar **los tres** antes de proponer
      nada que escriba en una base:
      - **survey / app ID**;
