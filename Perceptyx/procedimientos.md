@@ -1295,6 +1295,23 @@ quieren. Con los demos ya en `prefill_data`, sumarla a `emerge` es lo que la hab
 
 ### 2. Alinear los encabezados con `prefill_data` (Excel)
 
+- ✅ **Dónde está el archivo** (📣 Ignacio y captura, 19/10/2026): en **Transmit**, servidor EU, carpeta de la
+  empresa cliente → carpeta del app (`odtnpees26a`) → el archivo *ten addditional employees* (`.xlsx`, subido el
+  15/10). La URL de la tarea (`sftp://…/incoming/…/odtnpees26a/…`) es esa misma ruta. Si el app es US, la ruta
+  cambia de servidor, no de estructura.
+- ✅ **Resultado del cruce, 19/10/2026** (encabezados del archivo contra las columnas de `prefill_data`, en el
+  mismo orden del archivo): 61 columnas. **34 mapean** a `prefill_data`. **27 no mapean**. Entre las que no
+  mapean están `SSO ID` (va a `emerge.sso_id`, no a `prefill_data`) y `Phone Number` (el nombre en `emerge` es
+  `mobile_number`, no coincide).
+- ⚠️ **`mgr_id` aparece dos veces** (columnas 5 y 11). No se puede mapear las dos a la misma columna. 🔍 Antes de
+  cualquier import hay que saber cuál es el manager ID real. Se pregunta a Ignacio, no se elige.
+- ⚠️ **No borrar las columnas que no mapean sin revisar `emerge`.** La regla de *borrar lo que no mapea* (arriba)
+  sirve para `prefill_data`. `SSO ID` no mapea ahí, pero sí es un campo de `emerge`. Antes de descartarlo se
+  verifica si el Data File Builder lo lleva a `emerge.txt`.
+- 🔍 `prefill_data` tiene columnas que el archivo no trae: `email_1`, `manager_employee_id` (en las filas de
+  muestra repiten `email` y `mgr_id`), `auth`, `pyx_pin`, y las de sistema (`sequence`, `pyx_internal_source`,
+  `added_at`). No se completan a mano; se verifica qué queda vacío después del import (paso 5).
+
 ✅ Las columnas reales del app:
 
 ```sql
