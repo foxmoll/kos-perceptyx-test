@@ -1303,8 +1303,10 @@ quieren. Con los demos ya en `prefill_data`, sumarla a `emerge` es lo que la hab
   mismo orden del archivo): 61 columnas. **34 mapean** a `prefill_data`. **27 no mapean**. Entre las que no
   mapean están `SSO ID` (va a `emerge.sso_id`, no a `prefill_data`) y `Phone Number` (el nombre en `emerge` es
   `mobile_number`, no coincide).
-- ⚠️ **`mgr_id` aparece dos veces** (columnas 5 y 11). No se puede mapear las dos a la misma columna. 🔍 Antes de
-  cualquier import hay que saber cuál es el manager ID real. Se pregunta a Ignacio, no se elige.
+- ✅ **`mgr_id` aparece dos veces** (columnas 5 y 11) y **tienen la misma información** (📣 Ignacio, 19/10/2026).
+  Se mapea una sola: la **columna 5**, que además queda entre las primeras cinco. La otra se quita antes del
+  builder, y así no hay dos columnas que pisen la misma en el import de Querious. 🔍 No verificado contra datos:
+  si hay una fila donde difieran, se consulta antes de importar.
 - ⚠️ **No borrar las columnas que no mapean sin revisar `emerge`.** La regla de *borrar lo que no mapea* (arriba)
   sirve para `prefill_data`. `SSO ID` no mapea ahí, pero sí es un campo de `emerge`. Antes de descartarlo se
   verifica si el Data File Builder lo lleva a `emerge.txt`.
