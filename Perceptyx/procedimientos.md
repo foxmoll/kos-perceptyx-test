@@ -1279,6 +1279,13 @@ quieren. Con los demos ya en `prefill_data`, sumarla a `emerge` es lo que la hab
 
 ### 1. Mirar el archivo y el app
 
+- ✅ **Resultado del paso 1, 19/10/2026** (`select * from prefill_data limit 10;`, base EU de un late add): las
+  columnas coinciden con el esquema verificado. **`emp_id` y `mgr_id` están en minúsculas** (el Data File
+  Builder las pasa a minúscula, 📣 Elena). Los IDs de las listas que manda el cliente suelen venir en
+  mayúsculas: **comparar siempre en minúsculas** (`lower(emp_id) in (…)` o la lista en minúsculas). Una
+  búsqueda en mayúsculas no encuentra nada y hace parecer que los IDs no existen. `manager_employee_id` sí
+  viene en mayúsculas: el mismo ID puede aparecer distinto en dos columnas.
+
 - Archivo de la tarea en **Transmit** (SFTP del cliente, carpeta del app) → carpeta propia.
 - `select * from prefill_data limit 10;` en el app: ver si la carga inicial vino de LEB, si hay bandas
   calculadas (edad, generación, tenure). En el caso **no había bandas** → nada que calcular, aunque el
