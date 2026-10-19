@@ -162,6 +162,19 @@ Dominio abierto el **2026-10-06**. Convención completa en [[Perceptyx/_indice|P
        4. **solo el primer paso**. El siguiente, cuando Ignacio traiga el resultado.
   - Cada paso sale del procedimiento del vault; si hay varias vías, se nombran (regla de las distintas
     formas, arriba) y se dice cuál se propone y por qué.
+- **Dos controles en toda guía, completa o paso a paso** (propuestos por Claude a pedido de Ignacio, 2026-10-19, después
+  de la prueba de Antigravity con un ticket real, [[KOS/Operadores|Operadores]] § Antigravity):
+  1. **Compuertas primero.** Antes de las herramientas, una línea por cada compuerta de
+     [[Perceptyx/procedimientos#Compuertas antes de cualquier tarea que toque demográficos|procedimientos § Compuertas]]
+     con su resultado. Si una da rojo, la guía termina ahí y dice qué la destraba. Una regla que dice *"tiene que estar
+     X"* es una condición que se verifica, **nunca un paso que se ejecuta** para cumplirla (el caso: *"la regla 2 exige
+     desactivarlo"*, cuando la regla pide que esté cerrado).
+  2. **Cada paso con su fuente, en la misma línea:** la sección del vault de la que sale (`procedimientos § …`), o 🔍 si
+     no sale de ninguna. Un paso, una query o un nombre de columna sin sección y sin 🔍 es un defecto de la guía. El
+     ticket se ubica primero en [[Perceptyx/procedimientos#Mapa: tipo de ticket → sección|procedimientos § Mapa]]; si no
+     está, se dice que no hay procedimiento escrito antes de proponer pasos. `procedimientos.md` es largo: se leen
+     **completas** la sección del mapa, *Compuertas* y *Reglas que valen para toda tarea*, no solo el principio del
+     archivo ni el fragmento que devolvió una búsqueda.
 - **IA y datos de clientes:** Perceptyx tiene una **lista de clientes con los que no se puede usar GPT**
   (página de WTC en Confluence, vista el 06/10). Antes de pegarle a Claude —o a cualquier IA— algo de un
   cliente, aunque sea para entender una tarea, chequear esa lista. El vault ya no guarda datos de

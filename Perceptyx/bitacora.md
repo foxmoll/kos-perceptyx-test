@@ -7,6 +7,21 @@ Cuando algo de acá cambia, no se borra: se marca `SUPERSEDED (fecha)` y se enla
 
 ---
 
+## 2026-10-19 — Ticket nuevo sin procedimiento: cambiar las bandas de un demo calculado
+
+Ticket real que Ignacio trabajó con Antigravity y revisó con Claude. Cliente y app: omitidos. Patrón: el
+cliente pide **cortes propios** para la banda de edad (desde la fecha de nacimiento) y la de tenure (desde la
+fecha de ingreso original), en un survey de LEB, EU, **en vivo**.
+
+- 📣 Ignacio: **se trabaja después del cierre del survey**, no desactivándolo antes. Pasó a la regla 2 de
+  [[Perceptyx/procedimientos|procedimientos]].
+- 📣 Ignacio: el backup a mano `CREATE TABLE <tabla>_AAAAMMDD_<iniciales> LIKE <tabla>` + `INSERT … SELECT` **es
+  válido**, lo vio con otros DM. Pasó a la regla 1 como tercera vía.
+- Sin procedimiento escrito: quedó en procedimientos § Pendientes, con lo que hay que averiguar al hacerlo.
+- La prueba del operador y los cambios de arquitectura que salieron de ella (mapa de tickets, compuertas): [[KOS/Operadores|Operadores]] § Antigravity.
+
+---
+
 ## 2026-10-16 — KOS de equipo en el GitHub de la empresa: decisiones de base, ejecución en pausa
 
 Conversación de Ignacio con Claude. Se descartó NotebookLM como base, porque no escribe, no sigue el grafo y no

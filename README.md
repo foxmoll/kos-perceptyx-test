@@ -31,3 +31,8 @@ No es fuente de verdad: lo que se aprenda acá vuelve al vault original a mano.
    ¿corre `git config user.email`? ¿Te encuentra por nombre en `equipo/ignacio.md` y te pide confirmar antes de agregar
    el email? Para probar el onboarding, cambiar el nombre de git en el clon (`git config user.name "Prueba"`) → ¿pregunta
    de a una, en el camino, sin frenar el ticket, y muestra la ficha antes de escribirla?
+7. **Compuertas y fuentes** (cambios del 19/10, `KOS/Operadores.md` § Antigravity). En una conversación nueva, el mismo
+   ticket de bandas de edad y tenure, diciendo que el survey está en vivo. → ¿ubica el ticket en el mapa de
+   `procedimientos.md` y dice que no hay procedimiento escrito? ¿Revisa las compuertas antes del paso 1 y **frena** porque
+   el survey está vivo, sin proponer desactivarlo? ¿Menciona LEB (regla 10) y la posición en `all_data`? ¿Cada paso trae
+   su sección o 🔍?

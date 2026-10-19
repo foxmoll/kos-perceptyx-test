@@ -22,6 +22,46 @@ Relacionado: [[Perceptyx/plataforma|plataforma]] (herramientas y tablas) ·
 
 ---
 
+## Mapa: tipo de ticket → sección
+
+Para encontrar la sección antes de armar pasos. **Si el ticket no está en el mapa, no hay procedimiento
+escrito**: se aplica [[KOS/Reglas|Reglas]] § 1 (*si no está en el vault, se pregunta*) y se arma con las
+compuertas de abajo, marcando 🔍 cada paso que no salga de una sección.
+
+| Pedido | Sección |
+|---|---|
+| Reordenar las opciones de un demo (bandas de edad, tenure, generación) | § Reordenar las opciones de un demográfico |
+| Demo nuevo, incluido uno calculado a partir de otro campo | § Agregar un demográfico nuevo |
+| Corregir demos, manager IDs o árbol con el survey cerrado | § Actualizaciones después del cierre del survey |
+| Sumar participantes con el survey en vivo | § Late adds |
+| Cargar el archivo final de un survey de LEB | § Carga del archivo final en un survey de LEB |
+| Archivo de participantes con LE / Data File Builder | § Data file load |
+| Trends que no cruzan | § Trend mismatch |
+| Usuarios Manager / Manager Below Threshold | § Usuarios Manager |
+| Emails, traducciones, chequeo de integridad, Launch Audit | § Emails, traducciones y chequeos del app |
+| Alta de cliente, SSO, API, borrado de PII | sus secciones, por nombre |
+| **Cambiar la definición de las bandas de un demo calculado** (otros cortes de edad o tenure) | **Sin procedimiento escrito** (§ Pendientes). Lo más cercano: § Agregar un demográfico nuevo y § Reordenar |
+
+## Compuertas antes de cualquier tarea que toque demográficos
+
+Se revisan **antes de dar el primer paso** y el resultado se dice en la guía, una línea por compuerta.
+Si una da rojo, no se da el paso 1: se dice qué la destraba. Cada una es una regla de la sección
+siguiente; acá están juntas para que no se salteen.
+
+| Compuerta | Rojo si… | Qué se hace | Regla |
+|---|---|---|---|
+| ¿Survey cerrado? | Está en vivo y la tarea no es un late add | No se desactiva: se espera el cierre o se consulta al PM | 2 |
+| ¿LEB? | Se armó en LEB con *Use LEB Data Collector* encendido | Apagar el toggle y avisar al PM antes de escribir por fuera | 10 |
+| ¿Hay respuestas? | `all_data` ya tiene respuestas para ese demo | Cambiar texto u orden de `resp_list` cambia el significado de las respuestas (el valor es una **posición**): reordenar con rebuild, nunca reescribir textos | [[Perceptyx/modelo-de-datos\|modelo-de-datos]] |
+| ¿Quién depende del demo? | Aparece en branching, filtros, comparison views o trends | Se rehace después del cambio | 3 |
+| ¿Hay backup? | Todavía no | Backup de cada tabla que se va a tocar | 1 |
+
+🔍 Armadas el 19/10/2026 a partir de la prueba de Antigravity con un ticket real ([[KOS/Operadores|Operadores]] §
+Antigravity): el operador conocía las reglas, pero propuso desactivar un survey vivo y no vio la regla 10 ni la de
+posiciones. No agregan reglas: juntan las que ya estaban.
+
+---
+
 ## Reglas que valen para toda tarea
 
 1. **Backup antes de tocar nada.** Se respaldan las tablas que la tarea va a modificar. Nombre del
@@ -36,9 +76,21 @@ Relacionado: [[Perceptyx/plataforma|plataforma]] (herramientas y tablas) ·
    iniciales"* de arriba (Emily vía Gemini) sería para un backup con nombre a mano, o un detalle que Gemini
    deformó. *"Backing up tables ensures any mistakes can be corrected"* —
    es la red que permite trabajar tareas reales sin miedo.
+   **Tercera vía, a mano por SQL** (📣 Ignacio, 19/10/2026: *"es válido, lo he visto con otros DM"*): una
+   tabla nueva con la misma estructura y una copia de los datos, con nombre **fecha + iniciales**, que es el
+   formato del párrafo de arriba:
+   `CREATE TABLE <tabla>_AAAAMMDD_<iniciales> LIKE <tabla>;`
+   `INSERT INTO <tabla>_AAAAMMDD_<iniciales> SELECT * FROM <tabla>;`
+   🔍 Necesita permiso de `CREATE`: si da `create command denied`, queda la vía de Operations Tools.
 2. **El survey tiene que estar cerrado** antes de tocar demográficos. Se verifica en *Survey Setup ›
    Survey Configurations*: **Deactivation** tildado. Tocar `all_data` con el survey vivo puede romper
    respuestas de participantes.
+   **Es una condición que se verifica, no un paso que se ejecuta.** Si el survey está en vivo, no se
+   tilda *Deactivation* para poder trabajar: cortarlo deja afuera a quienes están respondiendo y esa
+   decisión no es de Delivery Ops. El ticket **se trabaja después del cierre** o se consulta con el PM
+   (regla 8). (📣 Ignacio, 19/10/2026: ticket de cambio de bandas con el survey vivo, *"hay que
+   trabajarlo después de que cierre la encuesta"*.) La excepción escrita son los **late adds**, que
+   solo suman valores con el survey vivo (§ Late adds).
 3. **Antes de cambiar un demo, buscar quién depende de él**: branching (`surv_questions_conditional`; Gemini lo había transcripto *"Q condition"*), filtros
    guardados por usuarios, comparison views, y **`trend_custom_linkages`** (trends contra surveys
    anteriores). Si hay dependencias, se rehacen después del cambio.
@@ -2206,6 +2258,14 @@ que Ignacio no tiene acceso**: no se pudo verificar):
 ---
 
 ## Pendientes de procedimiento sin cubrir
+
+- **Cambiar la definición de las bandas de un demo calculado** (pedido del cliente con cortes propios de
+  edad o tenure, a partir de la fecha de nacimiento o de ingreso). Apareció el 19/10/2026 con el survey en
+  vivo → se trabaja después del cierre (📣 Ignacio). Sin ver todavía: si se reescriben las opciones de
+  `resp_list` o se crea un demo nuevo; cómo se recalcula la banda de cada participante (¿*Add / Update
+  Demographics* con archivo, como § Agregar un demográfico nuevo?); qué pasa con las bandas `pyx_…` que
+  genera Perceptyx ([[Perceptyx/modelo-de-datos|modelo-de-datos]]). Al resolverlo, va a sección propia y al
+  mapa del principio.
 
 - Qué tablas exactas respalda el script de backup de un data file load (se sabe que depende de la
   tarea).

@@ -97,6 +97,43 @@ la documentación oficial:
 A confirmar antes de elegirlo: si la licencia de Gemini de Perceptyx es Gemini Enterprise o solo Gemini en
 Workspace, y si carga `AGENTS.md` solo, como Codex.
 
+## Antigravity — prueba con un ticket real (2026-10-19)
+
+Ignacio le pasó a Antigravity un ticket real (cambiar los cortes de las bandas de edad y tenure de un demo calculado,
+app EU armado en LEB) y trajo la conversación a Claude para contrastarla con el vault. Ignacio validó cada punto.
+
+**La forma salió bien.** Hizo una pregunta por mensaje, no volvió a pedir lo que ya venía en el ticket (app ID, EU,
+LEB), preguntó el modo de guía y, en paso a paso, dio herramientas con URL, tablas, overview y solo el primer paso
+(Reglas § 9). Las URLs coincidían con [[Perceptyx/plataforma|plataforma]].
+
+**El contenido falló donde el conocimiento estaba disperso:**
+
+| Error de Antigravity | Lo que dice el vault | Validó Ignacio |
+|---|---|---|
+| *"La Regla 2 exige desactivarlo temporalmente"* y lo puso como paso 1 | La regla 2 pide survey **cerrado**; un survey vivo no se corta para trabajar. El ticket va después del cierre | ✅ correcto |
+| No vio que en `all_data` el valor es una **posición** en `resp_list` | Reescribir o reordenar opciones con respuestas cambia su significado | ✅ |
+| No mencionó la regla 10 (LEB pisa lo hecho por SQL) y propuso *reactivar* al final | Activar el survey reescribe desde LEB `resp_list`, `all_data`, etc. | ✅ |
+| Backup con `CREATE TABLE … LIKE` + `INSERT` | El vault solo tenía `;bck` y *Backup Table* | ❌ **Es válido** (📣 Ignacio: lo vio con otros DM) → agregado como tercera vía |
+| Sin búsqueda de dependencias | Regla 3 | ✅ |
+| `option_order`, *"Deactivate Survey?"*, recálculo por `UPDATE` sin marca 🔍 | Reglas § 1: lo deducido se marca | ok |
+| Arrancó sin mirar cómo estaban las bandas hoy | — | ✅ |
+
+**Diagnóstico** (🔍 Claude): las reglas cortas y en lista (§ 9) se cumplieron; las que viven como prosa dentro de un
+`procedimientos.md` de más de 2.000 líneas no. El operador no tenía cómo encontrar qué secciones aplicaban a un ticket
+sin procedimiento escrito, y armó la guía con pedazos. **Ningún arreglo va en el adaptador** (Principio, arriba):
+Claude y cualquier otro operador tienen el mismo riesgo.
+
+**Cambios de arquitectura del 19/10:**
+
+1. [[Perceptyx/procedimientos#Mapa: tipo de ticket → sección|procedimientos § Mapa]]: tabla tipo de ticket → sección,
+   con fila explícita para lo que **no** tiene procedimiento.
+2. [[Perceptyx/procedimientos#Compuertas antes de cualquier tarea que toque demográficos|procedimientos § Compuertas]]:
+   las reglas 1, 2, 3, 10 y la de posiciones juntas en una tabla *rojo si… / qué se hace*, al principio del archivo.
+3. Regla 2 reescrita como **condición que se verifica, no paso que se ejecuta**.
+4. [[KOS/Reglas|Reglas]] § 9: toda guía empieza por las compuertas y cada paso lleva su fuente o 🔍 en la misma línea.
+
+Para medirlo: prueba 7 del `README.md`, el mismo ticket en una conversación nueva de Antigravity.
+
 ## Agregar un operador nuevo
 
 1. Un adaptador fino que lleve a `KOS/Bootstrap.md`, en el formato que esa IA cargue sola.
