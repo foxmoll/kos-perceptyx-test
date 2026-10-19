@@ -1303,6 +1303,19 @@ que no mapean** (y las vacías). 📣 Elena prefiere hacerlo *antes* del Data Fi
 que sale se importa **uno a uno sin mapear a mano** — *"especially if you have hundreds of columns"*.
 La otra vía (la que hizo primero en la call) es mapear columna por columna en el import de Querious.
 
+✅ **Verificado 19/10/2026** (capturas del *Table Reference* de Querious, base del app EU, 📣 Ignacio):
+- `prefill_data`: `sequence`, `pyx_internal_source`, `emp_id`, `email`, `first_name`, `last_name`, `auth`,
+  `pyx_pin`, `mgr_id`, `full_name`, `email_1`, `manager_employee_id`, `active`, `absent`, `birth_date`,
+  `original_hire_date`, `gender`, `termination_date`, `department`, `work_country`, `job_title`, …, `grade`,
+  `band`, `added_at` (TIMESTAMP). **No hay columnas de banda de edad ni de tenure** (`band` es la banda de
+  puesto, no un demo calculado). Eso responde el paso 1: nada que calcular.
+- `emerge`: `sequence`, `survey_closed`, `survey_completed`, `create_date`, `sent_date`, `first_response_date`,
+  `last_response_date`, `client_id`, `emp_id`, `middle_init`, `auth`, `first_name`, `last_name`, `theme`,
+  `email`, `mobile_number`, `sso_id`, `pyx_pin`.
+- 🔍 El orden de columnas de la **tabla** no es el orden que pide el **archivo**: en `prefill_data` la primera
+  es `sequence`, no `emp_id`. Por eso la exigencia de que las primeras cinco columnas del archivo sean
+  `emp_id, first_name, last_name, email, mgr_id` **no sale de la tabla** y queda abierta (ver *Pendientes*).
+
 ~~Lo que el Data File Builder necesita en las primeras columnas: **first name, last name, email, manager
 ID** (📣).~~ Corregido el 16/10, releyendo la transcripción: Elena dijo que el archivo *"does have first name, last name,
 email, and manager ID as first four columns… five columns"*. ✅ En la captura de Excel las primeras cinco eran
@@ -1325,6 +1338,17 @@ select * from emerge       where emp_id in ("…", "…");
 - 📣 **Chequear también por email**: a veces emp ID y email no coinciden.
 - Los que ya están se **sacan del archivo**. Si ya se importaron, se borran de `prefill_data` por
   `sequence` (los del import tienen `sequence` mayor al último que había).
+- ✅ **Decidir por ID, no en bloque** (📣 Ignacio, 19/10/2026: *"hay que verificarlo"*). Cada ID de la lista
+  del cliente cae en uno de cuatro casos, según lo que devuelvan las dos consultas:
+
+  | Dónde está el ID | Qué hacer | Por qué | Certeza |
+  |---|---|---|---|
+  | En `prefill_data` **y** en `emerge` | Sacarlo del archivo. No se toca | Ya está cargado y puede responder | ✅ (procedimiento) |
+  | Solo en `prefill_data` | **No** volver a importarlo a `prefill_data` (duplicaría la fila). Consultar a Ignacio cómo sumarlo solo a `emerge` | `prefill_data` acepta duplicados sin avisar | 🔍 el caso no está escrito |
+  | Solo en `emerge` | No tocar nada. Consultar a Ignacio antes de decidir | Inconsistencia entre tablas; no hay procedimiento escrito | 🔍 |
+  | En ninguna | Entra normal por el archivo | Caso de late add | ✅ |
+
+  🔍 Sacar a todos los IDs del archivo sin correr esto deja afuera a los de la fila 2 sin invitación.
 - 🔍 `emerge` rechazaría el duplicado con error; **`prefill_data` lo acepta sin avisar** (📣) — por eso
   el chequeo va antes.
 
@@ -1411,6 +1435,10 @@ el resto en No). ✅ Lo que marcó:
 4. ✅ En Excel, `BUSCARV` del `mgr_id` contra `emp_id` → marcar *missing*. **Solo debe faltar el nodo de
    arriba** (el CEO): si falta un manager entre los nuevos, va al PM (regla 8). Al CEO, `mgr_id = 0`.
    Guardar como `managers_tree.txt`.
+   ✅ **Por esta vía (*Settings › Upload Managers*), el CEO va en el archivo con `mgr_id = 0`**, como dice
+   este procedimiento. 🔍 La regla de *quitar la fila del CEO y la placeholder* (§ Actualizaciones después
+   del cierre, 30/09) es de **otra vía** (Data File Builder para el árbol). No se aplica acá. Si la carga
+   falla, consultarlo antes de reintentar.
 5. ✅ ***Reference Reports › Manager Hierarchy Tree*** (`rm=managers_tree`) **› Settings** → *CEO
    emp_id* + *Choose File* → ***Upload Managers***. Reconstruye el árbol completo.
 6. ⚠️ **El rebuild pierde los `trend_emp_id` puestos a mano.** Antes de subir, ver si `managers_tree`
@@ -2258,6 +2286,11 @@ que Ignacio no tiene acceso**: no se pudo verificar):
 ---
 
 ## Pendientes de procedimiento sin cubrir
+
+- **Late add: IDs que están solo en una de las dos tablas** (`prefill_data` o `emerge`). Cómo sumarlos sin
+  duplicar. Apareció el 19/10/2026 con el ticket odtnpees26a. Pregunta abierta para Ignacio.
+- **Late add: orden de las primeras columnas del archivo.** ¿El Data File Builder exige `emp_id, first_name,
+  last_name, email, mgr_id` al inicio, o alcanza con que las columnas existan? Sin resolver (🔍).
 
 - **Cambiar la definición de las bandas de un demo calculado** (pedido del cliente con cortes propios de
   edad o tenure, a partir de la fecha de nacimiento o de ingreso). Apareció el 19/10/2026 con el survey en
