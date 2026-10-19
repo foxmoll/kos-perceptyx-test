@@ -1308,7 +1308,8 @@ La otra vía (la que hizo primero en la call) es mapear columna por columna en e
   `pyx_pin`, `mgr_id`, `full_name`, `email_1`, `manager_employee_id`, `active`, `absent`, `birth_date`,
   `original_hire_date`, `gender`, `termination_date`, `department`, `work_country`, `job_title`, …, `grade`,
   `band`, `added_at` (TIMESTAMP). **No hay columnas de banda de edad ni de tenure** (`band` es la banda de
-  puesto, no un demo calculado). Eso responde el paso 1: nada que calcular.
+  puesto, no un demo calculado). Esto sale del esquema, no del paso 1: el paso 1 (`select * from prefill_data
+  limit 10;`, origen LEB y bandas en las filas) **sigue pendiente**.
 - `emerge`: `sequence`, `survey_closed`, `survey_completed`, `create_date`, `sent_date`, `first_response_date`,
   `last_response_date`, `client_id`, `emp_id`, `middle_init`, `auth`, `first_name`, `last_name`, `theme`,
   `email`, `mobile_number`, `sso_id`, `pyx_pin`.
