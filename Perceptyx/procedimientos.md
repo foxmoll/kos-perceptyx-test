@@ -1376,6 +1376,10 @@ select * from emerge       where emp_id in ("…", "…");
   | En ninguna | Entra normal por el archivo | Caso de late add | ✅ |
 
   🔍 Sacar a todos los IDs del archivo sin correr esto deja afuera a los de la fila 2 sin invitación.
+  ✅ **Resultado en un ticket real, 20/10/2026:** los 13 IDs que el cliente marcó como existentes estaban en las
+  dos tablas. En 4 de 13, `survey_completed = 0` (invitados, sin responder). En los 13, `first_name`, `last_name`
+  y `email` salían en blanco en `prefill_data` y `emerge`, a diferencia de las filas de muestra. 🔍 Pendiente
+  saber si el blanco es `NULL` o texto vacío; si el dato falta de verdad, es para el PM (regla 8).
 - 🔍 `emerge` rechazaría el duplicado con error; **`prefill_data` lo acepta sin avisar** (📣) — por eso
   el chequeo va antes.
 
