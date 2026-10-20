@@ -186,6 +186,8 @@ Dominio abierto el **2026-10-06**. Convención completa en [[Perceptyx/_indice|P
 - **Cada dato o paso indica dónde se encuentra** (📣 Ignacio, 2026-10-20). Cuando se pide un dato o una acción en una
   herramienta, se dice la ruta exacta: URL o pantalla, menú y sección (por ejemplo *OnDemand › Survey Setup › Survey
   Configurations*), con la fuente del vault. No se asume la región ni la URL: si no está en el pedido, se pregunta.
+- **Cierre de sesión: siempre se sube a `main`** (📣 Ignacio, 2026-10-20). Al cerrar una sesión, lo commiteado se
+  pushea a `main` además de la rama de trabajo, sin esperar otra confirmación. Un fast-forward, sin reescribir historia.
 - **Mensajes a PMs o al equipo, en inglés** (📣 Ignacio, 2026-10-20). Todo mensaje, mail o nota dirigido a un PM o al
   equipo de Perceptyx se escribe en **inglés**. Lo que se le dice a Ignacio sigue en español.
 - **Lo que cambia se marca `SUPERSEDED (fecha)`, no se borra.** Que un proceso cambió es información.
