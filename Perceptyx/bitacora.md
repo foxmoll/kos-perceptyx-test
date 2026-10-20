@@ -7,6 +7,30 @@ Cuando algo de acá cambia, no se borra: se marca `SUPERSEDED (fecha)` y se enla
 
 ---
 
+## 2026-10-20 — Late add en un survey vivo: el archivo ya estaba cargado
+
+Ticket real de late add (EU, LEB, en vivo), trabajado paso a paso con Ignacio. Cliente, personas y app ID:
+omitidos. Procedimiento actualizado en [[Perceptyx/procedimientos#Late adds: sumar participantes a un survey que ya está en vivo (Elena, call del 16/10)|procedimientos § Late adds]].
+
+- ✅ **Resultado:** los 20 registros del archivo ya estaban en `prefill_data`, `emerge` y `managers_tree`, con el mismo
+  email. No hubo altas. El nombre del archivo decía 10 y traía 21 filas: el conteo tiene que salir del contenido.
+- ✅ **La addenda del cliente listaba 13 IDs.** Los 13 coincidieron 1 a 1 en `prefill_data` y `emerge`. Los otros 7
+  del archivo también estaban por ID y por email.
+- ✅ **Los IDs están guardados en minúsculas;** el cliente los manda en mayúsculas. Buscar en mayúsculas da cero y
+  parece que los IDs no existen.
+- ✅ **`mgr_id` aparecía dos veces** en el archivo, con la misma información. Se mapeó una.
+- 📣 Ignacio: el blanco de nombres y emails en las consultas fue redacción propia (datos personales fuera del chat),
+  no un dato faltante.
+- ⚠️ **Un participante existente con otro manager:** el archivo y el sistema difieren en el manager de uno de los 20.
+  Ambos managers existen en el árbol. No se tocó nada: es un cambio de jerarquía de alguien ya en el survey, y el
+  procedimiento de late add no lo cubre. Pendiente de respuesta del PM (regla 8), con el mensaje en inglés.
+- 🔍 Las 7 filas de `emerge` tienen fecha de creación del 16/10, misma fecha de la call con Elena. No está confirmado
+  que sea la misma carga.
+
+📣 Ignacio, 2026-10-20: los mensajes a PMs y al equipo se escriben en inglés (incorporado a [[KOS/Reglas|Reglas]] § 9).
+
+---
+
 ## 2026-10-19 — Ticket nuevo sin procedimiento: cambiar las bandas de un demo calculado
 
 Ticket real que Ignacio trabajó con Antigravity y revisó con Claude. Cliente y app: omitidos. Patrón: el
