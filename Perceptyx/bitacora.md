@@ -7,6 +7,21 @@ Cuando algo de acá cambia, no se borra: se marca `SUPERSEDED (fecha)` y se enla
 
 ---
 
+## 2026-10-20 — Integridad: `all_data` desfasado contra `prefill_data` en un participante (5 demos, survey LEB EU, cerrado)
+
+Ticket de integridad, cliente y personas omitidos. Procedimiento en [[Perceptyx/procedimientos#Resincronizar `all_data` después de reordenar — *Operations tools › Data › Sync reporting demographics from participant data*|procedimientos § Resincronizar]] y [[Perceptyx/modelo-de-datos#El valor en `all_data` es una posición, no un texto ni una clave|modelo-de-datos § posiciones]].
+
+- ✅ **Síntoma:** *Quality and Integrity Checks* → *Verify all_data demographics match prefill_data*: cinco demos de texto o código vacíos en `all_data` para un participante, con `prefill_data` correcto. Es copia de reporte desfasada, no pérdida de datos.
+- ✅ **Diagnóstico en solo lectura:** la columna `prefill_data` de cada demo sale de `prefill_linkage` (`resp_id` → `emerge_id`, que es el nombre de la columna). Las opciones están en `resp_list`. Columnas verificadas en [[Perceptyx/modelo-de-datos#Columnas verificadas en la base (✅ 20/10/2026, Querious, survey LEB EU)|modelo-de-datos]].
+- ✅ **Antes de escribir:** cuatro dependencias revisadas (branching, trends, filtros guardados y comparison views): 0 filas en las cuatro.
+- ✅ **Escritura:** backup desde la app (el snippet SQL dio `execute command denied` con la conexión de lectura). *Test Mode* listó las mismas cinco discrepancias. En vivo, la fila cambió y solo esa: verificado contra el backup con la query de § Resincronizar.
+- ✅ **Cierre:** el chequeo de integridad volvió a correr limpio.
+- ✅ **Posición confirmada:** el índice que escribió el sync coincide con la posición 0-based por `seq`, con la opción vacía contando como 0 (ver modelo-de-datos). `option_id` y `option_order` no sirven para eso.
+- 🔍 **Conexión de Querious:** la pestaña decía `classic-mysql-us`, y ahí apareció el backup que creó la app EU, con las mismas filas. 📣 Ignacio: la VPN de US sirve para los dos entornos. Por confirmar con Jackie que la lectura EU pasa por ese host, para no leer un servidor distinto al de la app.
+- 🔍 **`emerge.survey_closed` = 0** para un participante en un survey cerrado. Es un flag por participante: no reemplaza la compuerta de *Deactivation* en *Survey Configurations*.
+- 🔍 **Tensión:** el procedimiento dice que el sync ordena las opciones alfabéticamente; acá el índice siguió `seq`. Por confirmar.
+- ✅ **Error evitado en el camino:** el procedimiento pide el paso a paso con queries y la lectura del ticket desde el primer mensaje. No hay cambio de procedimiento: es la regla de [[KOS/Reglas|Reglas]] § 9 que ya existía.
+
 ## 2026-10-20 — Comentarios automáticos, survey cerrado (odpsegps269): verificación post-cierre
 
 Ticket de verificación de comentarios automáticos en un survey cerrado (US, LEB, no healthcare). Cliente y personas

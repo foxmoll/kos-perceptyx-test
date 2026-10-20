@@ -35,6 +35,16 @@ documentación de engineering**, con un detalle que lo explica todo: cómo se gu
 | **Unión emerge ↔ prefill** | `prefill_linkage_ids` | **Una sola fila** que dice qué columnas unen `emerge` con `prefill_data` (ej. Employee ID ↔ `emp_id`) |
 | **Unión demo ↔ columna** | `prefill_linkage` | Qué columna de `prefill_data` alimenta cada `resp_questions` |
 
+### Columnas verificadas en la base (✅ 20/10/2026, Querious, survey LEB EU)
+
+- `resp_questions`: `id` (`02_NN_07`, el ID del demo), `list`, `width`, `required`, `g_id`, `text` (nombre del demo), `text_fmt`, `quid`, `date_hidden`.
+- `resp_list`: `seq` (PK), `id` (ID del demo, enlaza con `resp_questions.id`), `text`, `option_order`, `option_id`, `quid_option_id`.
+- `prefill_linkage`: `resp_id` (el qid) y `emerge_id`. **Ojo con el nombre:** `emerge_id` es el nombre de la **columna en `prefill_data`**, no la tabla `emerge`.
+- `surv_questions_conditional`: `id`, `qid`, `status`, `q_text`, `q_condition`.
+- `trend_custom_linkages`: `id`, `cond1`, `trend_app_id`, `cond2` (y el resto de columnas, no revisado).
+- `my_queries` (filtros guardados): `id`, `timestamp`, `username`, `name`, `sql_query`, `disp_query`.
+- `comparison_views`: `sequence`, `username`, `view_name`, `view`, `view_disp`.
+
 ### El valor en `all_data` es una posición, no un texto ni una clave
 
 ⚠️ **El valor de un demo en `all_data` es el *índice* de la opción dentro del grupo de opciones de ese demo
@@ -43,6 +53,14 @@ en `resp_list`, en orden de `seq`.** No es una clave foránea ni el texto.
 Ejemplo (anonimizado): `resp_list` para `02_04_07` tiene, en orden de `seq`, *(vacío)*, *Empresa A*,
 *Empresa B*, *Empresa C*. Un respondente con `2` en `all_data.02_04_07` es de **Empresa B**: el vacío es
 la posición 0 (por eso toda lista de opciones empieza con `B_L_A_N_K`), y cuenta desde ahí.
+
+✅ **Confirmado con un caso real (20/10/2026):** en `02_02_07`, por `seq`, las opciones son *(vacío)*, *Needs improvement*,
+*Strong*, *Exceptional*. El `all_data` de una persona con *Strong* guarda `2`. Para cinco demos de otra persona, la posición
+calculada como `count(*)` de opciones del mismo demo con `seq` menor coincidió con el valor que escribió la sincronización en vivo.
+- ⚠️ **`option_id` no es la posición:** queda NULL en opciones que sí se usan. **`option_order`** vino en 0 en todas las opciones
+  consultadas. No usar ninguno de los dos para calcular el índice.
+- 🔍 Tensión con § Resincronizar: allí se dice que el sistema ordena las opciones alfabéticamente. En este demo el índice siguió
+  `seq`, no el orden alfabético. Por confirmar con Jackie.
 
 **Por qué importa — esto explica las reglas del training:**
 

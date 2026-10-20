@@ -77,6 +77,10 @@ posiciones. No agregan reglas: juntan las que ya estaban.
    iniciales"* de arriba (Emily vía Gemini) sería para un backup con nombre a mano, o un detalle que Gemini
    deformó. *"Backing up tables ensures any mistakes can be corrected"* —
    es la red que permite trabajar tareas reales sin miedo.
+   ✅ **Observado 20/10/2026:** `mac.create_backup` dio `execute command denied` desde la conexión de solo lectura. La app
+   (*Operations Tools › Utilities › Backup table*, en la URL del survey) hizo el backup y verificó filas (entrada = salida).
+   La app devuelve el nombre de la tabla: `<tabla>_backup_AAAAMMDD_hhmmss_NNNNNN`. Anotar ese nombre: sirve de referencia
+   para la verificación posterior.
    **Tercera vía, a mano por SQL** (📣 Ignacio, 19/10/2026: *"es válido, lo he visto con otros DM"*): una
    tabla nueva con la misma estructura y una copia de los datos, con nombre **fecha + iniciales**, que es el
    formato del párrafo de arriba:
@@ -489,6 +493,7 @@ Survey Configurations*: esa pantalla no muestra estos toggles. 🔍 Pendiente co
 3. Verificar que el conteo de temas cambió, **rebuild y flush del comments report**.
 4. En **EU** es igual, en el entorno EU (la VPN de US sirve para los dos — 📣 Ignacio).
 5. Variante de Edwin: el mismo script desde **SOS** (IT / Python / Perl scripts).
+6. ✅ **Observado 20/10/2026:** el paso 2 del script **escribe** en `comments theme matches` (hacer visibles los temas). Si el paso 3 responde `mismatches in comment qid counts` con la automatización de Snowflake en curso, la salida pide esperar o volver a correr. **Volver a correr solo el paso 3, no el 2:** repetir el paso 2 vuelve a escribir sobre lo ya escrito.
 
 **Estado al 01/10/2026** (✅ decisión registrada en el huddle, por Jackie Cech): engineering dice que
 está arreglado, pero **el script manual se sigue corriendo** hasta que los chequeos automáticos entren
@@ -1575,6 +1580,20 @@ chequeos con casillas en vez de escribirlos.
   Partial Responses*** (360, Ask).
 - 🔍 Hace lo mismo que el script Perl `rebuild all data demo from prefill` que mostró Emily el 01/10 (§
   Reordenar, paso 7), desde la interfaz.
+- ✅ **Qué muestra *Test Mode* y qué no** (20/10/2026): lista solo las discrepancias (demo, persona, valor de prefill, y
+  `all_data` vacío o con otro valor). **No muestra el índice que va a escribir.** En vivo, la salida dice
+  `Updated N records`: es el contador de registros recorridos, **no de cambios**. Para saber qué cambió, comparar contra
+  el backup (solo lectura):
+
+```sql
+select count(*) as filas_cambiadas
+from all_data a
+join <backup> b on b.client_id = a.client_id
+where not (a.`02_13_07` <=> b.`02_13_07`)
+   or not (a.`02_17_07` <=> b.`02_17_07`);   -- agregar los demos sincronizados
+```
+
+  `<=>` compara también los NULL. Si `client_id` estuviera repetido, el join cuenta de más: revisar antes de concluir.
 
 ### Launch Audit (SOS › Launch › *Launch Audit*) — la tarea *"launch audit"*
 
