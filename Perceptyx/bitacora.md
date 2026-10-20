@@ -52,6 +52,38 @@ omitidos. Procedimiento actualizado en [[Perceptyx/procedimientos#Late adds: sum
   que sea la misma carga.
 
 📣 Ignacio, 2026-10-20: los mensajes a PMs y al equipo se escriben en inglés (incorporado a [[KOS/Reglas|Reglas]] § 9).
+## 2026-10-20 — Ticket nuevo sin procedimiento: user setup con varios status, empleados y umbral por país
+
+Conversación del 17/10, cerrada el 20/10. Ignacio pegó la tarea; no se trabajó todavía (faltan app ID, LEB/Classic,
+estado del survey y el ticket de user setup anterior). Cliente, survey y tickets: omitidos.
+
+**El patrón** (✅ texto de la tarea): cinco status de acceso a reportes — dos de manager (general y de un país) y tres de
+**empleado** que ven los resultados **de su manager**, o del siguiente nivel si no llega al umbral. El país lleva un
+**umbral más alto (25)**, que la tarea llama *"minimum comment threshold"*. Se pide **replicar la lógica de un survey
+anterior** (su app y su ticket de user setup) y que reportes, dashboards, demos y restricciones por status coincidan con
+un **app de usuarios de prueba ya aprobado**. Plazo: QA terminado el jueves anterior a la activación del lunes.
+
+Lo que sale de cruzarlo con el vault:
+
+- ✅ **El vault solo cubre los status de manager** ([[Perceptyx/procedimientos|procedimientos]] § Usuarios Manager): *Add
+  Users* en dos pasadas y vista del primer superior que llega. **No hay procedimiento para usuarios empleado** con la
+  vista del manager. En *Add Users* solo se vieron poblaciones de managers.
+- ✅ **`get-mgr-counts` no cuenta comentarios** (invitados, respuestas, completions). 🔍 Si el umbral es de comentarios,
+  esa herramienta no alcanza para clasificar. 🔍 *"Comment threshold"* también puede ser un mínimo configurado en el
+  status, o sea configuración de reportes y no de creación de usuarios.
+- 🔍 **Dos umbrales en el mismo app:** en las tareas vistas, *Add Users* tomaba un solo umbral, ya configurado por el PM.
+  No se sabe si admite uno por status.
+- 🔍 **Cinco status = el tope de *Custom Roles and Statuses* por compra** ([[Perceptyx/catalogo-servicios|catalogo-servicios]]):
+  dentro del alcance si el contrato es el estándar.
+- 🔍 El snippet ***Users - Reporting User Setup*** (`;dmtuseraccts`, [[Perceptyx/plataforma|plataforma]] § Text
+  Expander) es el primer lugar donde buscar. Su contenido no se vio.
+- 🔍 Vía probable, sin probar: leer en el survey anterior cómo quedó cada status (`users`, `statuses`) **antes** de
+  definir la lógica, y comparar `statuses` contra el app de prueba.
+
+**Lo que salió mal en la respuesta (Claude):** pidió cinco datos juntos y metió el análisis en el medio. Eso viola la
+regla *de a una pregunta por mensaje* ([[KOS/Reglas|Reglas]] § 1, 17/10). La sesión arrancó en una rama `claude/…`
+**desactualizada**, sin esa regla ni el mapa de tickets, y no se trajo `main` antes de leer. Quedó en
+[[KOS/Execution|Execution]] § Vault Sync.
 
 ---
 

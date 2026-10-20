@@ -36,7 +36,13 @@ git pull --rebase --autostash
 ```
 
 Ignacio may have written from the phone since the last session. Pulling is not modifying the
-vault, so it is allowed even for read-only agents. If the pull fails (no network, auth), say so in
+vault, so it is allowed even for read-only agents.
+
+**This includes Normal Conversation Mode when it answers from the vault** — a ticket, a question — not only before
+editing. A cloud session can open on a `claude/...` branch cut from an old `main`, with no upstream, so `git pull` fails
+with *"no tracking information"*. Then run `git fetch origin main && git merge --ff-only origin/main` before reading.
+Case from 2026-10-17: a session answered a ticket with a copy that was missing the rules and the ticket map written two
+days earlier ([[../Perceptyx/bitacora|bitacora]] 2026-10-20). If the pull fails (no network, auth), say so in
 one line — the state about to be read may be stale — and continue.
 
 **After writing to the vault** — once per agent execution or per conversational task, never per
