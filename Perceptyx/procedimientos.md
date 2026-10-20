@@ -472,8 +472,12 @@ Sesión 01/10/2026 (demo updates) y huddle del mismo día.
 **El bug:** los comentarios que se procesan con el **modelo léxico** se pierden o quedan mal tematizados
 en Snowflake. Los surveys con **modelo supervisado** no tienen el problema.
 
-**Cómo saber si un survey está afectado:** *Survey Setup › Survey Configurations* → si está activo el
-procesamiento automático de comentarios en Snowflake, y si el modelo es léxico o supervisado.
+**Cómo saber si un survey está afectado:** ✅ (captura del 20/10/2026) *Report Editor › Configuration*, con los
+campos **Filter** y **Bucket** (la casilla *Show Active Toggles Only* oculta lo apagado). Filter `Snowflake` →
+*"Enables automated comments processing (Snowflake)"*: si está activo, hay procesamiento automático. Filter
+`Themes matching` → *"usage of machine learning level"* (valor *Level 0: … lexical keyword matching* = léxico) y
+*"supervised: machine learning models"* (activo = supervisado). 📣 Antes el procedimiento decía *Survey Setup ›
+Survey Configurations*: esa pantalla no muestra estos toggles. 🔍 Pendiente confirmar la ruta con Jackie.
 
 **Workaround manual** (surveys con modelo léxico):
 

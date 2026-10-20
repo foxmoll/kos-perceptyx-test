@@ -7,6 +7,30 @@ Cuando algo de acá cambia, no se borra: se marca `SUPERSEDED (fecha)` y se enla
 
 ---
 
+## 2026-10-20 — Comentarios automáticos, survey cerrado (odpsegps269): verificación post-cierre
+
+Ticket de verificación de comentarios automáticos en un survey cerrado (US, LEB, no healthcare). Cliente y personas
+omitidos. Procedimiento en [[Perceptyx/procedimientos#Comentarios con modelo léxico (workaround de bug)|procedimientos § Comentarios con modelo léxico]].
+
+- ✅ **Dónde está la configuración:** *Report Editor › Configuration*, con los campos Filter y Bucket. Filter `Snowflake`
+  muestra el procesamiento automático ("Enables automated comments processing (Snowflake)"); Filter `Themes matching`
+  muestra el modelo: *usage of machine learning level* (valor *Level 0: lexical keyword matching*) y *supervised* (apagado).
+  El procedimiento decía *Survey Setup › Survey Configurations*: ruta corregida.
+- ✅ **Estado:** procesamiento automático activo, modelo léxico. Aplica el workaround.
+- ✅ **Script `comments verify steps` (SOS, opción 2 *After Close*):**
+  - Paso 1, temas duplicados: ninguno.
+  - Paso 2, hacer visibles los temas: completado. ⚠️ **Escribe en la base y se corrió sin backup previo** (regla 1).
+  - Paso 3, verificación: la automatización de Snowflake reporta *mismatches in comment qid counts* y pide dejarla terminar
+    o volver a correr. Temas supervisados: 0, con aviso de consultarlo con el PM.
+- ⚠️ **Pendiente:** respuesta del PM (mensaje en inglés, enviado por Ignacio). No se corrió el workaround en SQL hasta
+  tener esa respuesta. Con cero temas supervisados, la reinserción podría no tener qué restaurar.
+- 🔍 Hay tablas de backup de hoy en el app (`comments_themes_matches_partial_removal_20261020_…` y
+  `…_terms_removal_20261020_…`). No se sabe si las generó el script o una corrida anterior de alguien del equipo.
+- 🔍 El procedimiento está fechado al 01/10 y dice que el script manual se sigue corriendo hasta que los chequeos
+  automáticos entren en el survey launch audit. Falta confirmar con Jackie si sigue vigente.
+
+---
+
 ## 2026-10-20 — Late add en un survey vivo: el archivo ya estaba cargado
 
 Ticket real de late add (EU, LEB, en vivo), trabajado paso a paso con Ignacio. Cliente, personas y app ID:
