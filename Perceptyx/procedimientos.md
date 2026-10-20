@@ -1380,6 +1380,9 @@ select * from emerge       where emp_id in ("…", "…");
   dos tablas. En 4 de 13, `survey_completed = 0` (invitados, sin responder). Nombre y email aparecían en blanco
   al compartir el resultado porque se **borraron a propósito** (datos personales fuera del chat, 📣 Ignacio,
   20/10/2026). No es un dato faltante. Para compartir resultados: contar, no copiar filas.
+  ⚠️ **El chequeo de "ya están" cubre todas las filas que quedan en el archivo, no solo la lista del cliente.**
+  En ese caso, la addenda listaba 13 y el archivo traía además 10 nuevos. Los 13 de la addenda se confirmaron
+  en las tablas; los 10 nuevos se chequean igual, por ID y por email, antes de importar.
 - 🔍 `emerge` rechazaría el duplicado con error; **`prefill_data` lo acepta sin avisar** (📣) — por eso
   el chequeo va antes.
 
