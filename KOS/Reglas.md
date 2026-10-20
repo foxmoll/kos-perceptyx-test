@@ -183,6 +183,8 @@ Dominio abierto el **2026-10-06**. Convención completa en [[Perceptyx/_indice|P
   personal ciudadano de EE.UU. toque sus sistemas, datos o tickets (*Description of Service*, 2025-09).
   Antes de abrir una tarea de un cliente de esa región, verificarlo.
 - **Una página de Confluence describe cómo se hacía cuando se escribió.** Antes de seguirla, preguntar en qué herramienta se hace hoy ([[Perceptyx/services-os|services-os]]); y las páginas de otros equipos son contexto, no procedimiento.
+- **Mensajes a PMs o al equipo, en inglés** (📣 Ignacio, 2026-10-20). Todo mensaje, mail o nota dirigido a un PM o al
+  equipo de Perceptyx se escribe en **inglés**. Lo que se le dice a Ignacio sigue en español.
 - **Lo que cambia se marca `SUPERSEDED (fecha)`, no se borra.** Que un proceso cambió es información.
 - **Las distintas formas de hacer lo mismo se registran todas, con la misma validez** (Ignacio,
   2026-10-06: *"siempre registrá las distintas formas de hacer lo mismo, por ahora con la misma
