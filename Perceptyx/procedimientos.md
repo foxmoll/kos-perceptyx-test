@@ -41,6 +41,7 @@ compuertas de abajo, marcando 🔍 cada paso que no salga de una sección.
 | Emails, traducciones, chequeo de integridad, Launch Audit | § Emails, traducciones y chequeos del app |
 | Alta de cliente, SSO, API, borrado de PII | sus secciones, por nombre |
 | **Cambiar la definición de las bandas de un demo calculado** (otros cortes de edad o tenure) | **Sin procedimiento escrito** (§ Pendientes). Lo más cercano: § Agregar un demográfico nuevo y § Reordenar |
+| **User setup con varios status: empleados con la vista de su manager, umbral distinto por país, "replicar el survey anterior"** | **Sin procedimiento escrito** (§ Pendientes). Lo más cercano: § Usuarios Manager, solo para los status de manager |
 
 ## Compuertas antes de cualquier tarea que toque demográficos
 
@@ -2266,6 +2267,13 @@ que Ignacio no tiene acceso**: no se pudo verificar):
   Demographics* con archivo, como § Agregar un demográfico nuevo?); qué pasa con las bandas `pyx_…` que
   genera Perceptyx ([[Perceptyx/modelo-de-datos|modelo-de-datos]]). Al resolverlo, va a sección propia y al
   mapa del principio.
+
+- **User setup con varios status, incluidos empleados** (apareció el 17/10/2026, [[Perceptyx/bitacora|bitacora]]
+  2026-10-20): status de empleado que ven los resultados de su manager o del siguiente nivel, y un umbral más alto
+  para un país. Sin ver todavía: cómo se crean los usuarios empleado (¿*Add Users* tiene esa población?); qué umbral
+  usa *Add Users* cuando hay dos; si un umbral *"de comentarios"* se cuenta en la creación o se configura en el status
+  (`get-mgr-counts` no cuenta comentarios); cómo se compara `statuses` con un app de usuarios de prueba aprobado. Al
+  resolverlo, va a § Usuarios Manager o a sección propia, y al mapa del principio.
 
 - Qué tablas exactas respalda el script de backup de un data file load (se sabe que depende de la
   tarea).
