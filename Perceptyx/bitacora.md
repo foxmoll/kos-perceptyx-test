@@ -7,6 +7,38 @@ Cuando algo de acá cambia, no se borra: se marca `SUPERSEDED (fecha)` y se enla
 
 ---
 
+## 2026-10-15 — Ticket 862013: user setup de dos status con controles de integridad (cierre reportado, sin verificar)
+
+Trabajo hecho el 15/10 y **no registrado en el vault en su momento**. Esta entrada sale de los comentarios de cierre
+que Ignacio pegó el 20/10; no se verificó nada en la base desde esta sesión. Cliente, app y personas omitidos.
+Pedido: ver [[Perceptyx/procedimientos|procedimientos]] § Usuarios Manager (el caso es parecido, pero el umbral y el SSO ID cambian).
+
+- ✅ **Pedido** (texto de la tarea): dos status de reporte. Precondiciones a cargo del solicitante, incluidos los controles
+  de cierre, que no debían empezar antes del 14/10. **SSO ID = employee ID**. Integridad: borrar usuarios con menos de
+  10 preguntas, y quitar vistas de comparación dentro de umbral. Reporte de Leaders of Leaders con diferencia de 0 o 1
+  completions contra un manager de su descendencia.
+- 📣 **Resultado reportado:** 4.371 cuentas Manager con 10 o más completions de jerarquía, **inactivas**, con SSO ID =
+  emp_id. De ellas, 1.363 quedaron como `leader_of_leaders`. Vistas de comparación: My Leader, My Business Unit y My
+  Organization (Blue Box). `sso_id` ya no era único, así que no hubo cambio ahí. **Sin borrados** por integridad.
+- 📣 **Estado de la tensión activos/inactivos (09/10):** para este ticket las cuentas quedaron inactivas, según el reporte.
+  No cambia lo que muestra la herramienta.
+- ⚠️ **Decisiones abiertas al cierre** (el solicitante tiene que responder; no se resolvieron):
+  - 80 vistas My Leader y 21 My Business Unit dentro de umbral (menos de 10 completions de diferencia contra la vista
+    propia). 3 y 4 son idénticas. Lista adjunta. ¿Se borran?
+  - 14 vistas My Leader que apuntan a la cima del árbol, o sea muestran lo mismo que Company Overall. ¿Se mantienen?
+  - 82 nodos *open role* (IDs no numéricos) con 10 o más completions recibieron cuenta de líder. ¿Mantienen cuenta?
+  - 22 cuentas de personas que no están en `prefill_data` ni en `emerge`, probablemente términos que siguen en el árbol
+    de managers. ¿Se mantienen o se borran?
+  - Grupos 3 y 4 (104 cuentas) no tienen vista My Business Unit porque no tienen valor de Business Unit.
+- 📣 Ninguna cuenta leader o leader_of_leaders ve menos de 10 preguntas. 12 cuentas `market_report` preexistentes muestran
+  0 preguntas; no se tocaron.
+- ⚠️ **Método distinto del procedimiento:** *Quality and Integrity Checks* expiró en la verificación de vistas de
+  comparación (unas 13.000 vistas). La lista de dentro de umbral se calculó directo desde la base con las completions de
+  jerarquía, no desde el check.
+- 📣 El reporte de Leaders of Leaders (diferencia de 0 o 1 completions) se adjuntó al cierre. No está en el vault.
+
+---
+
 ## 2026-10-20 — Comentarios automáticos, survey cerrado (odpsegps269): verificación post-cierre
 
 Ticket de verificación de comentarios automáticos en un survey cerrado (US, LEB, no healthcare). Cliente y personas
