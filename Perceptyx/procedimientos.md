@@ -1383,6 +1383,10 @@ select * from emerge       where emp_id in ("…", "…");
   ⚠️ **El chequeo de "ya están" cubre todas las filas que quedan en el archivo, no solo la lista del cliente.**
   En ese caso, la addenda listaba 13 y el archivo traía además 10 nuevos. Los 13 de la addenda se confirmaron
   en las tablas; los 10 nuevos se chequean igual, por ID y por email, antes de importar.
+  ✅ **Conteo final de ese caso, 20/10/2026:** el nombre del archivo decía 10 y traía 21 filas. Los 13 de la
+  addenda coincidieron 1 a 1 en `prefill_data` y `emerge` y salieron del archivo. Quedan 8 filas (21 − 13).
+  Por email, 0 coincidencias. 🔍 Pendiente el chequeo por ID de esas 8 antes del paso 4. **El nombre del archivo
+  no sirve para contar las filas a cargar:** se cuenta sobre el contenido.
 - 🔍 `emerge` rechazaría el duplicado con error; **`prefill_data` lo acepta sin avisar** (📣) — por eso
   el chequeo va antes.
 
