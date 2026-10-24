@@ -52,6 +52,13 @@ bases"*): los demás READ ONLY son **visores por diseño** (comparar, previsuali
 Tools es **el único que reemplaza a una herramienta que escribía** (Querious) y no escribe. Lectura propia,
 no confirmada.
 
+✅ **Database Tools escribe (23/10/2026, captura de Ignacio, app EU):** la pantalla tiene *Select · Insert · Update ·
+Delete · Table*, con el banner *"EU production — reads use the replica, changes go to the primary"* y *"Runs on the
+primary. You preview it once; SOS backs up every row it touches, runs big changes in waves you can pause, and keeps an
+Undo."* Un `INSERT` de 3 filas en `prefill_data` entró con *Preview change* cuando Querious daba `INSERT command denied`.
+*Insert* también ofrece cargar un archivo (CSV o tab, primera fila = nombres de columna); *Preview load* no hizo nada.
+Lo de *"solo lectura"* de abajo queda `SUPERSEDED (23/10/2026)` para escrituras: 🔍 no se sabe desde cuándo.
+
 ✅ **Database Tools en uso (call de Jackie, 08/10):** un `CREATE TABLE` devuelve ***"Only select queries
 are permitted in this interface"***; devuelve **como máximo 10.000 filas** (una tabla de ~12.000 llegó
 cortada) y avisa *"query likely to be slow"* sin `WHERE`; `LIKE` no le funcionó (*"vamos a mandar un

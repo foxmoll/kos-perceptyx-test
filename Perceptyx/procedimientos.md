@@ -1426,6 +1426,22 @@ Devuelve cuatro archivos (✅): `<app>_AUDIT.txt`, `<app>_prefill_data.txt`, `<a
 - 📣 **El builder pasa los emp IDs (y los manager IDs) a minúscula.** Para SQL da igual; importa para el
   código **Perl** y para que la jerarquía sea consistente.
 
+✅ **Lo que mostró el builder en un late add del 23/10/2026** (app EU armado en LEB):
+- **Exige los cinco primeros encabezados con nombre exacto y en orden:** `emp_id`, `first_name`, `last_name`, `email`,
+  `mgr_id`. Con `First Name` frena con *"Invalid Required Columns… add them in anyway and you can keep them blank"*.
+  Resuelve el 🔍 del paso 2: no alcanza con que estén las columnas.
+- **Del sexto encabezado en adelante los copia tal cual.** No los renombra ni los valida: se alinean antes (paso 2).
+- **Agrega una columna `emp_id_1`** (copia de `emp_id`) antes de las `pyx_*`. `prefill_data` no la tiene: en el import
+  queda en *Unused File Columns*.
+- **Nombres de salida:** `<app>_prefill.data` (no `_prefill_data.txt`), `<app>_emerge.txt`, `<app>_AUDIT.txt`,
+  `<app>_resp.html`.
+- **`emerge.txt` sale sin encabezado y con cuatro columnas** (`emp_id`, nombre, apellido, email): sin `sso_id`.
+- **No calcula las `pyx_*`** que LEB puso en la carga inicial (región, tenure, banda de tenure en el puesto). Si
+  `prefill_data` las tiene, se derivan de las filas ya cargadas y se agregan al archivo antes del builder (bitácora
+  23/10). Una columna que es NULL en toda la tabla se saca del archivo: 🔍 vacía podría entrar como texto vacío.
+- 🔍 **No abrir la salida en Excel para editarla:** puede volver a cambiar fechas y el `0 ` con espacio. Si hay que
+  tocar los encabezados, se hace en un editor de texto.
+
 ### 5. Cargar `prefill_data` (import de Querious)
 
 - 📣 Renombrar `_prefill_data` a `.txt` → Querious, **conexión RW** del servidor (EU en el caso) → *File ›
@@ -1438,14 +1454,53 @@ Devuelve cuatro archivos (✅): `<app>_AUDIT.txt`, `<app>_prefill_data.txt`, `<a
   hasn't been the case previously."*
 - 🔍 En el caso había columnas `email_1` y `manager_employee_id` que repetían `email` y `mgr_id`; Elena
   las completó por consistencia, sin saber si se usan.
+- ✅ **`auth` queda NULL y está bien (23/10/2026):** el import no lo trae y no se completa. Dos altas anteriores con
+  `auth` NULL en `prefill_data` respondieron el survey: la entrada se resuelve por `emerge` (bitácora 23/10).
+- ✅ **Formato del import (23/10/2026):** *Import as* = **Tab**, *Destination* = base + tabla, y tiene que aparecer
+  la pantalla de **Column Mapping**. Si Querious toma el `.txt` como **SQL**, devuelve *"error in your SQL syntax… at
+  line 1"* sobre la línea de encabezados, y no escribe nada. Con *Stop if error occurs* activo, un error corta el import.
+- ✅ **Permiso:** el import necesita `INSERT` en la conexión RW del servidor del app. El 23/10 dio `INSERT command
+  denied` en EU: sin esa escritura no hay otra vía documentada para sumar filas a `prefill_data` (*Direct Import* del
+  builder borra a todos). ~~Se pide a Jackie o a un DM con escritura.~~ ✅ **Vía que funcionó el mismo día: SOS ›
+  Database Tools › Insert** con un `INSERT … VALUES` (columnas vacías omitidas → NULL), *Preview change* y confirmar.
+  SOS respalda las filas que toca. Detalle en [[Perceptyx/services-os|services-os]] § Database Tools.
 
 ### 6. Cargar `emerge` (*Survey Launch*)
 
 - Si en `emerge` no hay **SSO** ni **PIN** poblados, es el caso fácil (📣 *"nothing has been said in the
   task"*). Si los hay, 🔍 habría que poblarlos (*Operations tools › Populate Survey Launch Fields* existe;
   no se usó).
+- ✅ ***Populate Survey Launch Fields*** (Help, captura de Ignacio, 23/10/2026): completa campos de `emerge` desde una
+  columna de `prefill_data`. Opciones: campo para **SSO ID**, para **PIN** (después hay que poner el toggle *What to ask
+  on the Enter PIN page* en `pyx_pin`), para **Theme** (texto exacto de los themes de `rm=110`) y para **Email
+  Language** (ids de dos letras de `rm=18&tbl=languages`). En los cuatro, *"duplicates are ignored from being updated"*.
+  *Type of Update*: **Blanks Only** (solo registros vacíos) o *Clear and update all*. ⚠️ ***Survey Close Status***
+  actualiza **todos** los registros de `emerge` a `survey_closed` = 1 o 0: en un late add no se toca.
+  ✅ **Usado el 23/10/2026** en un late add con SSO (`emerge.sso_id` = email en todas las filas): SSO ID = `sso_id`, el
+  resto en N/A, *Type of Update* = **Blanks Only**, *Survey Closed Status* en blanco. Sin *Type of Update* frena con
+  *"Please select Type of Update and/or Survey Closed Status"* y no hace nada. Con eso: *"Table backed up: emerge"*,
+  *"Assigning SSO ID using prefill_data.sso_id field… 3 row(s) updated"*. La carga de *Upload Respondents* ya había
+  generado el `auth` en `emerge`; el `sso_id` no.
+  ✅ **`emerge` tiene una columna `lang`** (idioma del email; 19 columnas en ese app, no 18 como en la lista verificada del
+  paso 2). En ese app `lang` y `theme` estaban en NULL en las 17.788 filas: no hubo nada que completar. Antes de invitar se
+  mira cómo está en el resto (`employee_language` × `lang`).
 - ✅ **`rm=survey_launch` › subir respondents** → el `<app>_emerge.txt`. Después se ve a la gente en la
   lista de *Survey Launch*.
+- ✅ **Dónde y cómo (captura de Ignacio, 23/10/2026):** *Survey Launch* tiene tres pestañas: *Email Creation*, **Survey
+  Respondents** y *Launch Schedule*. En *Survey Respondents* están *Add New Respondent*, **Upload Respondents**, las búsquedas
+  múltiples por email y por emp ID, y la lista (con *Auth*, *Most Recent Email Sent*, *Survey Complete*). El diálogo de
+  *Upload Respondents* pide un archivo **sin encabezado**, con **exactamente 4 columnas separadas por tab** y en este orden:
+  Employee ID, First Name, Last Name, Email Address (o vacío). Es justo el formato del `<app>_emerge.txt` del builder. No
+  ofrece reemplazar ni enviar. 🔍 Agrega: así se vio en la call de Elena.
+- ✅ **Menú *Actions* de cada fila** (captura, 23/10/2026): *Edit Name/Email*, **Send Email**, *Re-Open Survey*, *Set Survey
+  Status to Available / Unavailable*, *Clear Survey*, *Assign New Auth Code and Clear Survey*, *Delete Respondent*, *Assign
+  New Auth Code* (las que no aplican aparecen grisadas). Debajo de la lista hay otro botón **Actions** que actúa sobre el
+  listado filtrado: 🔍 sin filtro serían todos. Para invitar a pocos late adds, *Send Email* fila por fila.
+  ✅ *Send Email* pide *"Pick an Email Body version"* con las versiones del survey (*Survey Invitation*, *Survey Reminder
+  1/2*, *Final reminder…*, *Final reporting invitation*). Con **Survey Invitation** y fila por fila, `emerge.sent_date`
+  quedó con la hora del envío en las 3 (23/10/2026). Antes de invitar conviene mirar ***Launch Schedule › Details*** de
+  los envíos pendientes (solo *Details*): muestran población (p. ej. *"Respondents that have not completed survey"* +
+  filtro por país) y cuántos reciben. Un late add que entra en esa población recibe ese recordatorio también.
 
 ### 7. Opciones de demo nuevas y *Quality and Integrity Checks*
 
@@ -1494,6 +1549,19 @@ el resto en No). ✅ Lo que marcó:
    (`select * from managers_tree_<fecha> where emp_id = …` → `UPDATE`; con muchos, un `JOIN`).
    ✅ En la vista del árbol: **verde** = trend natural (mismo emp ID en el survey anterior); **amarillo**
    = trend a otro nodo.
+
+✅ ***Build Hierarchy from Loaded Data*** (*Operations Tools › Participant Data*, botón **Download**; Help, captura de
+Ignacio, 23/10/2026): *"Builds and downloads a managers tree file from prefill_data"* con `emp_id`, `first_name`,
+`last_name`, `mgr_id`. Pide *CEO emp id* y la columna de manager ID. Marca vacíos, managers faltantes y referencias
+circulares, y cuelga los nodos afectados de nodos *placeholder*. El archivo (`<app>_tree.txt`) se importa en
+`rm=managers_tree`. 🔍 **No escribe**: arma el archivo de los pasos 3–4 de arriba desde `prefill_data` entero. La escritura
+sigue siendo *Upload Managers*, con lo que implica (rebuild completo, `trend_emp_id` del paso 6).
+
+✅ **Antes del rebuild, ver si hace falta** (late add del 23/10/2026): los 3 nuevos ya estaban en `managers_tree`, con su
+manager, y en toda la base no faltaba nadie (`emp_id NOT IN (SELECT emp_id FROM managers_tree)` = 0). Se compara contra el
+backup del paso 1 para saber si ya estaban antes de la carga. ✅ **Resultado:** ya estaban en el backup de las 15:52 (antes
+del `INSERT` de las 17:15), con el mismo `mgr_id` y `tree_path`. 🔍 Ese árbol se cargó con la jerarquía completa del
+cliente, incluida gente que no estaba en el survey: un late add puede no necesitar paso 8. Se verifica, no se asume.
 
 ### Cierre y hábitos de Elena
 

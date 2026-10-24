@@ -60,7 +60,8 @@ Lo que Delivery Ops usa y toca. Cómo se combinan en cada tarea está en
 ~~**Accesos al 01/10/2026:** Andrea, Guillermo e Ignacio dieron `command denied` al escribir en la base
 de producción; Jackie lo está mirando.~~ SUPERSEDED 06/10: Ignacio **ya tiene permisos de escritura**
 (📣 Ignacio). Si vuelve a aparecer `command denied`, el backup sale igual por Operations Tools ›
-Utilities. Las credenciales de la conexión read-write están en el chat
+Utilities. ✅ **23/10/2026:** `INSERT command denied` en la conexión RW de **EU** (import de un late add). 🔍 El permiso
+de escritura del 06/10 sería solo de US, o por servidor: pedido a Jackie. Las credenciales de la conexión read-write están en el chat
 de Jackie — **no se copian al vault**.
 
 ### URLs de trabajo
