@@ -7,6 +7,47 @@ Cuando algo de acá cambia, no se borra: se marca `SUPERSEDED (fecha)` y se enla
 
 ---
 
+## 2026-10-23 — Late add en un survey LEB vivo (app EU, 3 personas): bloqueado en el import por permisos
+
+Ticket *Data – (Late) Add – Live*, cliente y personas omitidos. Se empezó en Antigravity y se siguió en Claude Code.
+Procedimiento en [[Perceptyx/procedimientos#Late adds: sumar participantes a un survey que ya está en vivo (Elena, call del 16/10)|procedimientos § Late adds]].
+
+- ✅ **Backups** por *Operations Tools › Utilities › Backup table* (sin escritura en Querious). Los nombres no se anotaron:
+  se recuperan con `SHOW TABLES LIKE '%backup%';`.
+- ✅ **Chequeo de "ya están":** 0 coincidencias por ID y por email en `prefill_data` y `emerge`, comparando en minúsculas.
+- ✅ **Columnas `pyx_*` calculadas:** `prefill_data` del survey LEB tiene `pyx_*` que el Data File Builder de Operations
+  Tools **no calcula**. Se derivaron de lo ya cargado: región desde `work_country`, `pyx_role_tenure_band` desde
+  `years_in_role` (rangos sin solapamiento) y `pyx_tenure` desde `original_hire_date`, con corte en 21/09/2026 (no desde
+  `years_of_service`, que se solapa entre bandas). Las otras cuatro `pyx` estaban en NULL en todas las filas.
+- ✅ **Altas anteriores sin `pyx`:** tres filas sueltas (06/10, 12/10, 19/10) con todas las `pyx` en NULL, una con la fecha
+  en `dd/mm/aaaa` y otra sin país. 🔍 Late adds anteriores cargados sin calcularlas: quedan fuera de los cortes por región
+  y antigüedad. Para el PM (regla 8).
+- ✅ **Data File Builder:** ver § Late adds, paso 4 (encabezados obligatorios, `emp_id_1`, nombres de salida).
+- ✅ **Querious:** el primer import corrió el archivo como **SQL** (*syntax error* en la línea 1, la de encabezados). Con
+  formato **Tab**, destino base + tabla y la pantalla de *Column Mapping*, el mapeo coincidió solo.
+- ✅ **Bloqueo:** `INSERT command denied` en la conexión RW de EU (23/10). No se escribió nada (conteo de
+  `sequence > 22903` = 0). Contradice *"ya tiene permisos de escritura"* (06/10, [[Perceptyx/plataforma|plataforma]] §
+  Accesos): 🔍 el permiso sería por servidor. Pedido a Jackie.
+- ✅ **Destrabado por SOS:** *Database Tools › Insert* con un `INSERT … VALUES` armado a mano (41 columnas; las vacías se
+  omiten para que queden NULL). *Preview load* del archivo no hizo nada. Entraron 3 filas (`sequence` 22904–22906), con
+  `ismanager` = `0 ` y las `pyx` correctas. `auth` quedó NULL: ✅ **no hace falta completarlo**. Dos de las tres altas anteriores (22901, 22903) tienen `auth` NULL en `prefill_data` y respondieron el survey. Coincide con Elena, que no lo completó. 🔍 Que `prefill_data.auth` = `emerge.auth` en el resto (17.782 de 17.785) es efecto de la carga inicial de LEB, no un requisito. Ver
+  [[Perceptyx/services-os|services-os]] § Database Tools.
+- ✅ **Paso 6:** *Upload Respondents* con el `emerge.txt` del builder (generó `auth`), *Populate Survey Launch Fields* para
+  `sso_id` (Blanks Only, 3 filas, respaldó `emerge`), `lang` y `theme` en NULL en toda la base (nada que completar), e
+  invitación con *Send Email › Survey Invitation* fila por fila: `sent_date` en las 3.
+- ✅ **Paso 7:** *Q&I Checks* (Data Collector / Participant Data) sin alertas de linkage: los valores de los 3 ya existían
+  en `resp_list`, no hizo falta *Add missing demographic options* ni mirar el toggle de LEB. Única alerta: *Verify all_data
+  demographics match prefill_data*, un participante con `Non-Union` en `prefill_data` y vacío en `all_data` (1 ocurrencia).
+  No es de los 3 nuevos (su valor en esa columna es otro y todavía no entraron al survey). 🔍 Previo al ticket; mismo tipo
+  de caso que la entrada del 20/10.
+- ✅ **Paso 8 no hizo falta:** los 3 ya estaban en `managers_tree` antes de la carga (backup del paso 1), con su manager y
+  `tree_path`. La alta 22901 está en el árbol con manager, pero sin `mgr_id` en `prefill_data`: para el PM.
+- ✅ **Cierre:** validación final de Elena en 0 en los dos sentidos (`emerge` sin `prefill_data` y al revés). Mensaje al PM
+  con lo que no es del ticket: altas anteriores sin `pyx` (una sin `mgr_id` ni país, otra con fecha en otro formato), la
+  alerta de `all_data` y el cuidado con LEB.
+- ✅ **Errores del operador anterior corregidos en el camino:** comparar IDs sin pasar a minúsculas, y la compuerta LEB
+  dada en verde sin mirar el toggle *Use LEB Data Collector*.
+
 ## 2026-10-20 — Integridad: `all_data` desfasado contra `prefill_data` en un participante (5 demos, survey LEB EU, cerrado)
 
 Ticket de integridad, cliente y personas omitidos. Procedimiento en [[Perceptyx/procedimientos#Resincronizar `all_data` después de reordenar — *Operations tools › Data › Sync reporting demographics from participant data*|procedimientos § Resincronizar]] y [[Perceptyx/modelo-de-datos#El valor en `all_data` es una posición, no un texto ni una clave|modelo-de-datos § posiciones]].
