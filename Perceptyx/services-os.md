@@ -121,6 +121,23 @@ herramienta vieja**. 🔍 Los cruces son lectura propia salvo donde la guía dic
     configurar opciones) · **Verify Data** (V3: confirmar que la carga llegó — prefill, linkage, tablas
     resp, `all_data`). 🔍 V2/V3 parecen versiones próximas.
   - Se elige el survey por app ID o nombre; acepta **CSV, TXT, TSV, XLS, XLSX**; muestra *Recent runs*.
+  - ✅ **Audit de archivo final visto de punta a punta** (tarea real, 26/10/2026, capturas; app EU, ~72k filas, xlsx de
+    ~40 MB, ~115 columnas):
+    - **El audit de DOC es el del data spec**: *Data spec v3.1 · always latest*. Resuelve la versión cuando la tarea
+      dice "unknown". *Audit type* sale solo de la industria (*Standard* para non-healthcare).
+    - El **primer *Build*** (y la detección del CEO) dio **HTTP 502**. El segundo funcionó y tardó ~7 min
+      (436 s). 🔍 Parece un timeout con archivos grandes: reintentar una vez antes de cambiar de vía.
+    - *Hierarchy root*: sin jerarquía queda *"No hierarchy root — set manually"* y el build sigue igual (igual genera el
+      *managers-tree sidecar*, que no se usa).
+    - Resultado en cuatro bloques: **archivo LEB construido** (descargas: LEB file, Audit report, Managers hierarchy,
+      managers_tree) · ***Fix first — recommends holding*** (*"doesn't block the build"*) · **PASS/FAILED** con *Why this
+      failed* · ***Rows to correct*** (ej. `mgr_id` que no existe como `emp_id`) · *Columns by category* (Required,
+      Auto-generated, Optional).
+    - **Fallas duras vistas:** *File exceeds column limit of 99* y *Missing required fields: Employee ID, Email Address*
+      **aunque el mapeo había tomado `emp_id` y `email`**. 🔍 El audit parece leer los encabezados crudos del archivo, no
+      el mapeo, así que un archivo con encabezados viejos (`emp_id`) falla igual. A confirmar con el equipo.
+    - **Que el build salga no quiere decir que se pueda cargar.** Si la tarea dice *"upon audit pass, load"*, un FAILED
+      va al PM (§ Data specs en [[Perceptyx/procedimientos|procedimientos]]).
   - **Uso real visto (Jackie, 23/09):** pasar un archivo de emp / manager para que **deduzca la raíz del
     árbol de managers** y devuelva el archivo del árbol y los audit reports.
   - 🔍 Cuando *Configure Demographics* y *Verify Data* estén, reemplazan el reordenamiento por Excel + SQL
