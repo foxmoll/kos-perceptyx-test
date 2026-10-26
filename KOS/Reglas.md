@@ -188,6 +188,10 @@ Dominio abierto el **2026-10-06**. Convención completa en [[Perceptyx/_indice|P
   Configurations*), con la fuente del vault. No se asume la región ni la URL: si no está en el pedido, se pregunta.
 - **Cierre de sesión: siempre se sube a `main`** (📣 Ignacio, 2026-10-20). Al cerrar una sesión, lo commiteado se
   pushea a `main` además de la rama de trabajo, sin esperar otra confirmación. Un fast-forward, sin reescribir historia.
+- **A MAC (US y EU) se entra por SOS** (📣 Ignacio, 2026-10-26). Para llegar a un master app o a los reportes de un
+  survey: *SOS › Customer Hub* → el cliente → *Reporting*, que entra por Okta, sin password de MAC
+  ([[Perceptyx/services-os|services-os]] § Customer Hub). No se guía por la URL ni por la credencial de MAC, ni siquiera
+  cuando la tarea trae el link de MAC (la plantilla apunta a US).
 - **Mensajes a PMs o al equipo, en inglés** (📣 Ignacio, 2026-10-20). Todo mensaje, mail o nota dirigido a un PM o al
   equipo de Perceptyx se escribe en **inglés**. Lo que se le dice a Ignacio sigue en español.
 - **Lo que cambia se marca `SUPERSEDED (fecha)`, no se borra.** Que un proceso cambió es información.

@@ -15,7 +15,7 @@ Lo que Delivery Ops usa y toca. Cómo se combinan en cada tarea está en
 |---|---|---|
 | **Salesforce** | Donde viven las tareas (tickets) | Se cierran con estado *Complete* + iniciales. 📣 Ignacio |
 | **UDS** | ✅ **Unified Data Store** (Confluence *Activate / Nudge Setup*, 06/10). ⚠️ **Contradicción:** *Manager Heirarchy Tree* (engineering) lo llama ***User Directory Service***. 🔍 Probablemente la misma cosa con dos nombres en distintas épocas; la de Activate es la página más operativa. El almacén único de compañías, usuarios, roles y demográficos de la plataforma nueva (PIP); otros sistemas (Nudge Engine, binlog) se sincronizan contra él. Admin en *Administrator Portal › PYX Admin* | Login con Okta. ~~Qué es: sin confirmar~~ resuelto 06/10 |
-| **MAC** | Registro de clientes y sus *master apps* (*Customers Table*, *Functions › Create New App*) | ✅ Confluence |
+| **MAC** | Registro de clientes y sus *master apps* (*Customers Table*, *Functions › Create New App*). **Desde el 26/10/2026 se entra por SOS › Customer Hub** (US y EU, Okta, sin password de MAC — 📣 Ignacio, [[KOS/Reglas\|Reglas]] § 9) | ✅ Confluence |
 | **Okta** | Login único de Perceptyx **y** proveedor de identidad (SSO) de cada cliente: *Security › Identity Providers* (SAML 2.0), *Directory › Groups* (Group UUID del cliente) | Requiere Okta Verify. ✅ Confluence |
 | **Service desk (Atlassian)** | *Auto Tickets* internos, ej.: crear usuario SFTP | ✅ Confluence |
 | **Gainsight** | 🔍 Customer success; el doc dice que todavía no tiene un flag de admins de plataforma | ✅ mencionado en Confluence |

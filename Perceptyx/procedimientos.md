@@ -1162,8 +1162,9 @@ modified* queda con la hora de inicio.
 - El **app ID** está en la tarea. El **servidor** también: `www` (US) o `EU` (hay algunos `gov`, *"que
   se van"*).
 - **App ID que empieza con `OD`** → entrar por **`ondemand.perceptyx.com`** o **`ondemand.eu.perceptyx.com`**.
-- Entrar también al **master app self-service** del cliente (de ahí sale la data). Credenciales: las de
-  **MAC**; ⚠️ a algunos la de **EU es distinta** de la de US (al 23/09 a los nuevos no les andaba EU).
+- Entrar también al **master app self-service** del cliente (de ahí sale la data). ~~Credenciales: las de
+  **MAC**; ⚠️ a algunos la de **EU es distinta** de la de US (al 23/09 a los nuevos no les andaba EU).~~
+  **SUPERSEDED 26/10/2026 (📣 Ignacio): por *SOS › Customer Hub › Reporting*, en US y EU, sin credencial de MAC** ([[KOS/Reglas|Reglas]] § 9).
 
 ### 3. Decidir: ¿cargar por LEB o por la vía clásica?
 
