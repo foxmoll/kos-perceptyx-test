@@ -194,6 +194,10 @@ Dominio abierto el **2026-10-06**. Convención completa en [[Perceptyx/_indice|P
   cuando la tarea trae el link de MAC (la plantilla apunta a US).
 - **Mensajes a PMs o al equipo, en inglés** (📣 Ignacio, 2026-10-20). Todo mensaje, mail o nota dirigido a un PM o al
   equipo de Perceptyx se escribe en **inglés**. Lo que se le dice a Ignacio sigue en español.
+- **Un mensaje para mandar se da cuando está terminado** (📣 Ignacio, 2026-10-26: mandó un mensaje al PM con un marcador
+  *"[+ … si el 10a lo confirma]"* adentro, porque se lo pasé antes de tener el dato). Si falta un dato, primero se pide
+  el dato y después se da el mensaje. Si hay que darlo antes, se dice arriba, en negrita, **"no mandar todavía"**.
+  Nunca se dejan marcadores ni condicionales dentro del texto para copiar.
 - **Lo que cambia se marca `SUPERSEDED (fecha)`, no se borra.** Que un proceso cambió es información.
 - **Las distintas formas de hacer lo mismo se registran todas, con la misma validez** (Ignacio,
   2026-10-06: *"siempre registrá las distintas formas de hacer lo mismo, por ahora con la misma
