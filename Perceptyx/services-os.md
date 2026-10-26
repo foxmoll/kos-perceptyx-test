@@ -133,9 +133,11 @@ herramienta vieja**. 🔍 Los cruces son lectura propia salvo donde la guía dic
       managers_tree) · ***Fix first — recommends holding*** (*"doesn't block the build"*) · **PASS/FAILED** con *Why this
       failed* · ***Rows to correct*** (ej. `mgr_id` que no existe como `emp_id`) · *Columns by category* (Required,
       Auto-generated, Optional).
-    - **Fallas duras vistas:** *File exceeds column limit of 99* y *Missing required fields: Employee ID, Email Address*
-      **aunque el mapeo había tomado `emp_id` y `email`**. 🔍 El audit parece leer los encabezados crudos del archivo, no
-      el mapeo, así que un archivo con encabezados viejos (`emp_id`) falla igual. A confirmar con el equipo.
+    - **Fallas duras vistas:** *File exceeds column limit of 99* (la que quedó). *Missing required fields: Employee ID,
+      Email Address* apareció **solo cuando no se había aplicado el mapeo** de las 5 columnas (*Required 0/5*). Con
+      *Column mapping › View changes › Looks right* aplicado, desapareció. ~~🔍 El audit parece leer los encabezados
+      crudos, no el mapeo~~ **SUPERSEDED 26/10/2026** (Ignacio, segundo build): era el mapeo sin aplicar.
+      Hay que **confirmar el mapeo antes de cada build**.
     - **Que el build salga no quiere decir que se pueda cargar.** Si la tarea dice *"upon audit pass, load"*, un FAILED
       va al PM (§ Data specs en [[Perceptyx/procedimientos|procedimientos]]).
   - **Uso real visto (Jackie, 23/09):** pasar un archivo de emp / manager para que **deduzca la raíz del
