@@ -7,6 +7,35 @@ Cuando algo de acá cambia, no se borra: se marca `SUPERSEDED (fecha)` y se enla
 
 ---
 
+## 2026-10-26 — Archivo final con muestra en LEB (EU, draft): audit de DOC FAILED, no se cargó
+
+Tarea *PFS: Load Final Data File – OPTIONAL*, survey de LEB, EU, non-healthcare, sin jerarquía, versión del spec
+"unknown". Pedido: cargar solo los registros con *Yes* en la columna de muestra. Cliente y personas: omitidos.
+Trabajada paso a paso con Ignacio.
+
+- ✅ **Estado del survey:** *Deactivation* sin tildar no dice si está en vivo o sin lanzar. El sitio de reportes del sub
+  app (`?rm=dashboard`) **no tiene LEB ni *Manage settings***. La lista ***My Surveys*** del master app sí tiene una
+  columna **Status** (*Draft*). → [[Perceptyx/procedimientos|procedimientos]] § Carga del archivo final, paso 3.
+- ✅ **Llegar al master app sin MAC:** la URL de MAC de la tarea es la de US, y un cliente EU no aparece ahí (nombre
+  `EU-…`). La URL de MAC EU sigue sin estar en el vault. Se resolvió con **SOS › Customer Hub › Reporting**, que entra por
+  Okta → [[Perceptyx/services-os|services-os]] § Customer Hub.
+- ✅ **Columna de muestra:** tres valores (*Yes*, *No (Direct)*, *No (already was in Q3)*). ~49 % *Yes*, y los conteos
+  cerraron. El archivo traía además una columna `sequence`, que choca con el campo autogenerado del mismo nombre (§ LEB);
+  el audit no la marcó.
+- ✅ **DOC = audit del data spec (v3.1)**. Cierra la pregunta abierta del 08/10. El primer build dio **HTTP 502**; el
+  segundo tardó ~7 min. → [[Perceptyx/services-os|services-os]] § DOC.
+- ~~🔍 El audit lee los encabezados crudos, no el mapeo~~ **SUPERSEDED (mismo día):** *Missing required fields* salió
+  porque **el mapeo de las 5 columnas no se había aplicado**. Con el mapeo aplicado, desapareció.
+- ✅ **Falla dura real:** *File exceeds column limit of 99 (found 113)*. Más 15 `mgr_id` sin empleado (irrelevante sin
+  jerarquía). La tarea dice *"upon audit pass, load; if not… the task will then be closed"* → **no se cargó**: resumen
+  al PM (SKU *Additional Demographics* o archivo corregido o *Data Spec Compliance Review Request*) y tarea cerrada.
+- ✅ **Las descargas de DOC no sirven para el PM** (📣 Ignacio: *"no aporta nada enviárselos"*): el *Audit report* repite
+  por fila los campos v3.1 que faltan (*Nudge / AI Coach Eligible*), y *Export findings* es un PDF para el cliente.
+- 🔍 **Abierto:** cómo se filtra la muestra al cargar en LEB (paso 4.6) no se probó. Tampoco si 113 columnas entran con el
+  SKU de 135. Se verá si vuelve la carga.
+
+---
+
 ## 2026-10-23 — Late add en un survey LEB vivo (app EU, 3 personas): bloqueado en el import por permisos
 
 Ticket *Data – (Late) Add – Live*, cliente y personas omitidos. Se empezó en Antigravity y se siguió en Claude Code.

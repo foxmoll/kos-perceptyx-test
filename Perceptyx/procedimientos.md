@@ -1145,8 +1145,15 @@ modified* queda con la hora de inicio.
   a DM Task).
 - `.pgp` / `.gpg` → *SOS › Toolbox › IT Tools › PGP/GPG File Decrypt*. No abrir y guardar el CSV en Excel
   (rompe fechas y ceros a la izquierda, y genera *weird characters*).
-- **Audit del data spec antes de cargar** (no confundir con el Launch Audit): 🔍 *SOS › Design & Build ›
-  DOC › Load File*, sin confirmar que sea el mismo audit.
+- **Audit del data spec antes de cargar** (no confundir con el Launch Audit): ~~🔍 *SOS › Design & Build ›
+  DOC › Load File*, sin confirmar que sea el mismo audit.~~ **SUPERSEDED 26/10/2026:** ✅ es el mismo: DOC audita contra
+  el **data spec v3.1** (*always latest*). Antes de *Build LEB file*: **aplicar el mapeo de las 5 columnas** y, sin
+  jerarquía, dejar *No hierarchy root*. Si el audit da **FAILED**, no se carga: resumen al PM y se cierra la tarea
+  (detalle y qué traen las descargas en [[Perceptyx/services-os|services-os]] § DOC).
+- **Archivo con muestra** (*"load only records marked YES in column X"*, tarea del 26/10/2026): contar en Excel sin
+  guardar `=COUNTIF(<col>:<col>,"Yes")` y `=COUNTIF(<col>:<col>,"No*")`; la suma tiene que dar el total. El audit corre
+  sobre el **archivo completo** (lo que mandó el cliente) y el filtro se aplica al cargar en LEB (paso 4.6). 🔍 El
+  filtro en LEB no se llegó a probar: el audit falló antes. Las columnas de muestra (`Q3/Q4 SAMPLED`) no son demos.
 - **Antes de cargar:** confirmar el binlog de `prefill_data` (§ Sincronización con UDS). El Launch Audit
   lo avisa como *"Prefill→UDS binlog inactive"*.
 
