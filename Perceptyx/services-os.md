@@ -30,7 +30,7 @@ Launch → Reporting → Close**. El cliente elegido aparece como `EU-<cliente>`
 | Pieza | Para qué |
 |---|---|
 | **Dashboard** | Home: comunicados, tours, clientes guardados, launches programados |
-| **Customer Hub** | **Elegir el cliente una vez antes de empezar**: los módulos (la guía nombra Customizations, Branching y UDS User Health) se ajustan solos a ese cliente. Sin cliente elegido se puede entrar a casi todo, pero con menos (ej. cargar un archivo pide cliente) — 📣 Jackie, 21/09 |
+| **Customer Hub** | **Elegir el cliente una vez antes de empezar**: los módulos (la guía nombra Customizations, Branching y UDS User Health) se ajustan solos a ese cliente. Sin cliente elegido se puede entrar a casi todo, pero con menos (ej. cargar un archivo pide cliente) — 📣 Jackie, 21/09. ✅ **Abrir los reportes de un survey sin password de MAC** (tip de SOS, captura del 26/10/2026): en el Customer Hub, **Reporting** en la tarjeta del survey, o clic derecho › *Open reporting in a new window*. Entra por Okta y Platform y queda registrado en el audit log. Sirve también para EU, cuando no se tiene la URL de MAC EU |
 | **Event Journey** | Los módulos de cada fase del evento |
 | **Toolbox** | Scripts e IT Tools |
 | **Files** | Hub de archivos (lo que generan los scripts, lo que subís, lo que compartís) |

@@ -1163,6 +1163,10 @@ modified* queda con la hora de inicio.
 1. En LEB, **ver el survey → *Manage settings*: los toggles de sincronización** (§ LEB). Si están grises,
    el survey ya está **activo**: no se pueden cambiar, pero **se puede cargar igual** (a veces el cliente
    agrega gente con el survey vivo).
+   ✅ **Vía más rápida para el estado** (captura del 26/10/2026): el master app abre en ***My Surveys***
+   (`ondemand(.eu).perceptyx.com/<master_app>/app/#/surveys`), una lista con **Name, AppID, Created By, Date
+   Created y Status** (*Draft*, *Closed*…). Se busca el app ID de la tarea y se lee la columna. Ojo: el sitio de
+   reportes del sub app (`…/<app_id>/?rm=dashboard`) **no** muestra LEB ni *Manage settings*.
 2. **Comparar columnas** de `prefill_data` del **sub app** contra `prefill_data_all` del **master app**:
    `DESCRIBE` en las dos, pegar en Excel, `COUNTIF`. Diferencias esperables: `filename` (está en el
    master), y los campos que se agregan solos al cargar: `pyx_internal_source` (de dónde vino: import o
