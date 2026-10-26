@@ -138,6 +138,12 @@ herramienta vieja**. 🔍 Los cruces son lectura propia salvo donde la guía dic
       *Column mapping › View changes › Looks right* aplicado, desapareció. ~~🔍 El audit parece leer los encabezados
       crudos, no el mapeo~~ **SUPERSEDED 26/10/2026** (Ignacio, segundo build): era el mapeo sin aplicar.
       Hay que **confirmar el mapeo antes de cada build**.
+    - **Qué traen las descargas** (✅ 26/10/2026): ***Export findings*** es un PDF de una página, ***Data File Review***,
+      **escrito para el cliente** (*"Prepared for <cliente>"*, firmado con el nombre y el mail del DM). Lista los
+      hallazgos con *What to do* y el número de review. El ***Audit report*** es un xlsx con **una fila por empleado** y una
+      columna por chequeo. Con un archivo de spec viejo, todas las filas dicen *"column missing in the file"* para los
+      campos nuevos de v3.1 (*Nudge Eligible*, *AI Coach Eligible*): es ruido y no suma para el PM. Ignacio, 26/10:
+      *"no aporta nada enviárselos"* → al PM le alcanza con el resumen y el número de run.
     - **Que el build salga no quiere decir que se pueda cargar.** Si la tarea dice *"upon audit pass, load"*, un FAILED
       va al PM (§ Data specs en [[Perceptyx/procedimientos|procedimientos]]).
   - **Uso real visto (Jackie, 23/09):** pasar un archivo de emp / manager para que **deduzca la raíz del
