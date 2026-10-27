@@ -304,7 +304,14 @@ auditoría y cambios mínimos sin romper lo que está corriendo.
 | **Use LEB Data Collector** | Contenido del survey y demográficos: `surv_groups`, `resp_groups`, `surv_questions`, `surv_options`, `resp_questions`, `resp_list`, `prefill_linkage`, `all_data`, `progress`, dc settings | Al previsualizar, *Next: Settings* (desde invite) o activar el survey |
 | **Use LEB Filestorage** | Tabla `filestorage` (contenido de bienvenida y agradecimiento) | Ídem |
 | **Use LEB Categories** | `categories` y `category_qid` — **solo si Data Collector también está encendido** | Ídem |
-| Reporting Content / Translations / User Status Content | — | *"Coming in the future"* |
+| ~~Reporting Content / Translations / User Status Content~~ | — | ~~*"Coming in the future"*~~ **SUPERSEDED 27/10/2026** (✅ captura): ya existen, apagados por defecto |
+| **Use LEB Reporting Content** | Toolkit, benchmarks, comentarios (`lexical_keywords`) y visibilidad de reportes (`runmodes`) | Ídem |
+| **Use LEB Translations** | `languages`, `translated_phrases`, `localized_email_content` | Ídem |
+| **Use LEB User Status Content** | `statuses`, `status_privileges` | Ídem |
+
+✅ **Dónde están (27/10/2026):** master app › *My Surveys* › **Actions › View Survey** › **Managed Settings**
+(`…/<master_app>/app/#/builder/<n>/managed_settings`). Arriba está el toggle *Enable DC Mosaic* (apagado = DC Amsterdam,
+el default de los managed). Los seis de sincronización están más abajo, en la sección desplegable **Sync Settings**.
 
 - **Data Collector debería estar siempre encendido**, salvo que hayas hecho cambios fuera de LEB que no
   querés perder. Encendido no pisa nada por sí solo: pisa cuando alguien previsualiza, hace *Next:
@@ -1218,6 +1225,44 @@ modified* queda con la hora de inicio.
    no deja avanzar (Ignacio: *"igual que en UKG"*).
 7. *Save* → recorrer las pantallas o ***Preview listening event*** para que **sincronice** al sub app.
 8. **Comparar conteos** master vs. sub app.
+
+### 4b. Carga por *Bring your own list* con el archivo de DOC (tarea real, 27/10/2026)
+
+> ✅ Archivo final con muestra, app EU, survey en draft y vacío (sin demos ni dependencias). Paso a paso con Ignacio,
+> con capturas. Cliente omitido.
+
+- **Archivo:** el **LEB file (XLSX)** que genera DOC (*Recent runs* › descarga), **no el original del cliente**. DOC
+  rellena ceros, unifica mayúsculas y ordena las bandas.
+- **Ruta:** survey › **Invite** › *Email Distribution – Unique Links* › **Bring your own list**. Es un asistente de tres
+  pasos: **Upload → Data Mapping → Review**.
+- **`sequence` frena la subida:** *"These column names can't be used: sequence"*. **DOC no la renombra.** Se
+  renombra el encabezado a `sequence_` en el xlsx (solo esa celda) y se vuelve a subir (§ Columnas con nombre reservado).
+- **Límite de demos:** *"This file has 112 demographic columns. This survey allows up to 99"*. Es un bloqueo duro, no
+  un aviso. 📣 **Tim Sams (Slack del equipo, 27/10):** master app › **Configuration** › *Filter* = **`Max Number of
+  Demographics - Data Import`** (bucket *Self Service*, `index.cgi?rm=configure&bucket=Self%20Service`) › subirlo por
+  encima del número de columnas del archivo. Se usó 120 para 117 columnas. Vale para todo el master app. Anotar el valor
+  anterior.
+- **Data Mapping:** LEB destilda solo `emp_id`, `email`, `first_name` y `last_name`. El resto viene tildado. Se
+  destildan identificadores y datos personales, fechas, columnas de muestra y columnas vacías (`unnamed_*`): 30 de 113
+  en el caso. Eso es procedimiento, no elegir demos. Lo que es demo queda (decisión de la PM).
+- **Review:** *records found / ready for import / need fixing* (duplicados de emp ID o email). → *Save changes and
+  Import* carga **la lista completa**.
+- **Select Invitees › Add Filters:** se filtra por cualquier demo tildado (ahí, `q4_sampled` = *Yes*) y muestra *Total
+  invitees*. Después *seleccionar todo*. Coincidió con el conteo de Excel (35.464).
+- ✅ **El Preview es obligatorio:** después de importar, `prefill_data`, `emerge` y `resp_questions` ya estaban, pero
+  **`all_data` no tenía ninguna columna de demo**. El Q&I frena con *"ERROR! UNABLE TO PROCEED… Missing all_data
+  column(s)"*. Con **Preview Listening Event** se crearon las 83 (`information_schema.columns` de 0 a 83).
+- ✅ **LEB recorta el `0 ` de DOC:** después de la carga, `resp_list` tenía `0` sin espacio en 3 demos, y `prefill_data`
+  también en 2 de las 3 columnas (1.398 y 4.002 filas). El Q&I lo marca. Se arregló con `UPDATE … SET <col> = '0 '
+  WHERE <col> = '0'` por SOS › Database Tools (en `resp_list` y en `prefill_data`). 🔍 Previsualizar o activar puede
+  deshacerlo (regla 10): se avisa al PM que corra el Launch Audit antes de lanzar.
+- ✅ **Columnas del spec vacías en el archivo del cliente:** 30 demos sin opciones (`gender`, `work_country`,
+  `department`…). Los datos venían en columnas propias del cliente (`gender1`, `country`, `hr_region`,
+  `org_unit_name`). *Create demographic options from participant data* saca la alerta *missing a blank option*, pero
+  ***does not have any options*** sigue: no hay valor que crear. Se informa al PM. Antes de arreglar, **verificar que
+  los valores no estén en otra columna** (`sum(<col> <> '')`).
+- 🔍 **`emerge.survey_closed` = 0 en todos después de la carga, con el survey en Draft.** El snippet *"data load"* de
+  Jackie (paso 6.3) no está en el vault. Se le preguntó al PM si cerrar.
 
 ### 5. Duplicados (lo que no estaba en el guion)
 

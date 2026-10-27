@@ -57,6 +57,10 @@ Delete · Table*, con el banner *"EU production — reads use the replica, chang
 primary. You preview it once; SOS backs up every row it touches, runs big changes in waves you can pause, and keeps an
 Undo."* Un `INSERT` de 3 filas en `prefill_data` entró con *Preview change* cuando Querious daba `INSERT command denied`.
 *Insert* también ofrece cargar un archivo (CSV o tab, primera fila = nombres de columna); *Preview load* no hizo nada.
+✅ **Update en uso (27/10/2026):** *Preview change* muestra las filas que van a cambiar y el backup que va a crear
+(`sos_dbtool_<tabla>_<AAAAMMDD_hhmmss>`), y corre en tandas. **Con muchas filas pide escribir el nombre de la tabla**
+para confirmar. Si el `WHERE` no encuentra nada, no deja correr (*"matches 0 rows"*). En `resp_list` avisa que
+**reconstruye el *survey setup file*** después del cambio.
 Lo de *"solo lectura"* de abajo queda `SUPERSEDED (23/10/2026)` para escrituras: 🔍 no se sabe desde cuándo.
 
 ✅ **Database Tools en uso (call de Jackie, 08/10):** un `CREATE TABLE` devuelve ***"Only select queries

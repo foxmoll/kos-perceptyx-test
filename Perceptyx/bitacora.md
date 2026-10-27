@@ -7,6 +7,30 @@ Cuando algo de acá cambia, no se borra: se marca `SUPERSEDED (fecha)` y se enla
 
 ---
 
+## 2026-10-27 — Archivo final con muestra cargado por LEB (EU, draft): 113 columnas con el límite subido
+
+Sigue la tarea del 26/10 (audit FAILED por 113 columnas). 📣 La PM: *"this customer is already known to have over 99
+columns… proceed"*. Elena: *"ignore the warning and proceed"*. Cliente omitido. Paso a paso con Ignacio. Procedimiento en
+[[Perceptyx/procedimientos#4b. Carga por *Bring your own list* con el archivo de DOC (tarea real, 27/10/2026)|procedimientos § 4b]].
+
+- ✅ **Dependencias:** 0 en todo, salvo 2 `popup_definitions` (glosario, sin condición sobre demos) → **por LEB**. Un primer
+  conteo salió de la base de **otro survey**: Querious mostraba el resultado anterior al cambiar de base. Lo delató un
+  `prefill_data` idéntico al del late add del día anterior.
+- ✅ **Sync Settings:** los 6 toggles están en *Managed Settings* › *Sync Settings*. Default: 3 encendidos y 3 apagados.
+  Primero creí que no estaban, porque la sección está más abajo en la página.
+- ✅ **Dos bloqueos de LEB:** `sequence` (renombrada a `sequence_`) y el límite de 99 demos. Tim Sams pasó en Slack la
+  configuración del master app, que se subió a 120.
+- 🔍→❌ **Propuesta descartada por Ignacio:** cargar solo los 60 demos del Q3. Qué demos entran lo decide la PM, y la
+  PM dijo todos. Se destildaron solo identificadores, fechas, muestra y vacías (30): quedaron 83.
+- ✅ **Conteos:** 71.672 importados → filtro `q4_sampled` = *Yes* → 35.464 en `prefill_data` y en `emerge`. 83 demos.
+- ✅ **Q&I:** *Missing all_data columns* hasta el Preview. Después, ceros sin espacio (LEB recortó el `0 ` de DOC; se
+  corrigieron 1.398 + 4.002 filas y 3 opciones) y 30 demos sin opciones: columnas del spec vacías desde el cliente, con
+  los datos en `gender1`, `country`, etc. Opción en blanco creada. La alerta de *no options* queda.
+- ✅ **Cierre:** mensaje a la PM con el PDF *Data File Review* de DOC (aclarando que el límite de 99 se dispensó), demos
+  vacíos, *Reply-to* vacío en Communications, participantes abiertos en `emerge` (¿cerrar?) y el aviso de la regla 10.
+
+---
+
 ## 2026-10-26 — Late add en un survey LEB vivo (EU, 4 personas): cargado por SOS e invitado
 
 Tarea *Live Support (Data/Survey)*: sumar participantes y mandarles la invitación. Cliente y personas omitidos. Paso a
