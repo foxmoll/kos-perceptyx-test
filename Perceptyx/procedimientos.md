@@ -1477,6 +1477,22 @@ Devuelve cuatro archivos (✅): `<app>_AUDIT.txt`, `<app>_prefill_data.txt`, `<a
   Database Tools › Insert** con un `INSERT … VALUES` (columnas vacías omitidas → NULL), *Preview change* y confirmar.
   SOS respalda las filas que toca. Detalle en [[Perceptyx/services-os|services-os]] § Database Tools.
 
+✅ **Late add del 26/10/2026** (app EU de LEB, 4 personas). Lo que agregó:
+- **Comparar formatos de valor, no solo encabezados.** El archivo traía `Active` como `1` / `0`, y la base guarda
+  *true* / *false*. El builder lo dejó pasar y el Q&I lo marcó como *Can't find a resp_list entry '1'*. Se corrigió en
+  `prefill_data` con un `UPDATE` (`CASE WHEN TRIM(active)='1' THEN 'true' ELSE 'false' END`), **no** sumando opciones a
+  `resp_list`. Antes de cargar: `select <col>, count(*) from prefill_data group by 1` en las columnas tipo sí/no.
+- **Excel rompe valores sin avisar:** fechas → número de serie (`44620`), y `+4` → `4` (en esa base, `role_tenure_band` =
+  `+4` cuando `years_in_role` está vacío). Las fechas van a `AAAA-MM-DD` antes del builder.
+- **El `INSERT` armado con fórmulas de Excel falló:** sin paréntesis ni comillas, los vacíos se perdieron y las columnas
+  se corrieron. *Preview change* mostró **25 filas para 4 registros**. No se confirmó y no se escribió nada. Funcionó
+  armando la sentencia desde el `_prefill.data` **pegado como texto** (vacíos → `NULL`, apóstrofos escapados).
+  **Regla: si el *Preview* no muestra exactamente las filas esperadas, no se confirma.**
+- **Cálculo de `pyx_*` desde la base** (queries agrupadas, sin datos personales): regiones y función colapsada salen de
+  una tabla de búsqueda (`work_country`, `job_function`). `pyx_tenure` sale de `original_hire_date`, y la **fecha de
+  corte se deduce** de los `min`/`max` de cada banda (ahí, 18/09/2026). `pyx_role_tenure_band` sale de `years_in_role`
+  (0 → <1; 1–2; 3–4; 5–8). Las `pyx` vacías en toda la tabla no se agregan.
+
 ### 6. Cargar `emerge` (*Survey Launch*)
 
 - Si en `emerge` no hay **SSO** ni **PIN** poblados, es el caso fácil (📣 *"nothing has been said in the
@@ -1513,6 +1529,11 @@ Devuelve cuatro archivos (✅): `<app>_AUDIT.txt`, `<app>_prefill_data.txt`, `<a
   quedó con la hora del envío en las 3 (23/10/2026). Antes de invitar conviene mirar ***Launch Schedule › Details*** de
   los envíos pendientes (solo *Details*): muestran población (p. ej. *"Respondents that have not completed survey"* +
   filtro por país) y cuántos reciben. Un late add que entra en esa población recibe ese recordatorio también.
+
+✅ **26/10/2026 — *Blanks Only* alcanza a todo `emerge`:** *Populate Survey Launch Fields* completó **7** SSO, los 4
+nuevos y 3 altas anteriores que lo tenían vacío. El backup que crea se llama `emerge_upd_fields_<AAAAMMDD_hhmmss_…>`.
+Con un `LEFT JOIN` a ese backup se ve quién cambió. Llenar un vacío desde `prefill_data` no rompe nada, pero se informa
+al PM. En este app `emerge` **no tenía columna `lang`**: varía por app.
 
 ### 7. Opciones de demo nuevas y *Quality and Integrity Checks*
 
@@ -1574,6 +1595,11 @@ manager, y en toda la base no faltaba nadie (`emp_id NOT IN (SELECT emp_id FROM 
 backup del paso 1 para saber si ya estaban antes de la carga. ✅ **Resultado:** ya estaban en el backup de las 15:52 (antes
 del `INSERT` de las 17:15), con el mismo `mgr_id` y `tree_path`. 🔍 Ese árbol se cargó con la jerarquía completa del
 cliente, incluida gente que no estaba en el survey: un late add puede no necesitar paso 8. Se verifica, no se asume.
+
+✅ **26/10/2026 — late add ya en el árbol, pero con otro manager:** los 4 estaban en `managers_tree`, y uno
+tenía **otro `mgr_id`** que el del archivo (el árbol se cargó con un dato viejo). Corregirlo exige el rebuild completo
+con el survey vivo, así que va al PM y no se hace dentro del late add (regla 8). Para verlo:
+`select emp_id, mgr_id from managers_tree where emp_id in (…)` contra el `mgr_id` del archivo.
 
 ### Cierre y hábitos de Elena
 

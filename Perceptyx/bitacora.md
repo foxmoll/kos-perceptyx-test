@@ -7,6 +7,35 @@ Cuando algo de acá cambia, no se borra: se marca `SUPERSEDED (fecha)` y se enla
 
 ---
 
+## 2026-10-26 — Late add en un survey LEB vivo (EU, 4 personas): cargado por SOS e invitado
+
+Tarea *Live Support (Data/Survey)*: sumar participantes y mandarles la invitación. Cliente y personas omitidos. Paso a
+paso con Ignacio. Procedimiento en [[Perceptyx/procedimientos#Late adds: sumar participantes a un survey que ya está en vivo (Elena, call del 16/10)|procedimientos § Late adds]].
+
+- ✅ **Pasos 1–3:** los encabezados del archivo mapearon 51 de 51 contra `prefill_data` (minúsculas, `_`; *Employee ID*
+  → `emp_id`, *Manager Employee ID* → `mgr_id`). Hubo que reordenar para dejar `emp_id, first_name, last_name, email,
+  mgr_id` primero. 0 coincidencias por ID y por email.
+- ✅ **`pyx_*`:** 6 de 9 con valores en la base. Reglas deducidas de queries agrupadas (procedimientos § Late adds,
+  entre los pasos 5 y 6).
+- ✅ **Paso 5:** Querious dio otra vez `INSERT command denied` en EU (segunda vez, confirma el 23/10). Un primer
+  `INSERT` armado en Excel mostró 25 filas en el *Preview* y no se confirmó. El segundo, armado desde el texto, entró: 4
+  filas (`sequence` > 18068).
+- ✅ **Paso 6:** *Upload Respondents* + *Populate* (Blanks Only) completó 7 SSO: los 4 nuevos y 3 altas anteriores.
+- ✅ **Paso 7:** el Q&I marcó `active` en `1`/`0` contra opciones *true/false*. `UPDATE` de 4 filas por SOS y Q&I de
+  nuevo sin alertas de linkage. Quedaron, previas al ticket: 10 participantes con `all_data` vacío (190 líneas en 47
+  demos), 3 demos sin opciones y 1 participante fuera del árbol → PM.
+- ✅ **Paso 8:** no hizo falta rebuild. Un nuevo tenía en el árbol un manager distinto del archivo → PM.
+- ✅ **Paso 9:** sin envíos programados en *Launch Schedule*. *Send Email › Survey Invitation* fila por fila, con
+  `sent_date` en los 4. 📣 Ignacio decidió invitar también a 2 *Not eligible / Unpaid Leave*, porque lo pidió el cliente.
+- ✅ **Cierre:** validación de Elena 0 / 0. Mensaje al PM con todo lo que no es del ticket.
+- 🔍 **Patrón confirmado por segunda vez:** las 3 altas anteriores a este late add (las últimas `sequence` antes de las
+  nuestras) tenían las `pyx` de región vacías. Late adds de otras manos cargados **sin calcular las `pyx`**: quedan fuera
+  de los cortes por región. Sube la confianza en la hipótesis del 23/10.
+- ✅ **Error de operador:** se dio un mensaje al PM con un marcador adentro, antes de tener el dato, e Ignacio lo mandó.
+  Regla nueva en [[KOS/Reglas|Reglas]] § 9.
+
+---
+
 ## 2026-10-26 — Archivo final con muestra en LEB (EU, draft): audit de DOC FAILED, no se cargó
 
 Tarea *PFS: Load Final Data File – OPTIONAL*, survey de LEB, EU, non-healthcare, sin jerarquía, versión del spec
