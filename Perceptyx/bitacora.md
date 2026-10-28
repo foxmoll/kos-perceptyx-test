@@ -7,6 +7,51 @@ Cuando algo de acá cambia, no se borra: se marca `SUPERSEDED (fecha)` y se enla
 
 ---
 
+## 2026-10-28 — Correcciones post-cierre (árbol, regiones, sync) en un survey LEB con otro DM trabajando en paralelo
+
+Sigue el late add del 26/10 (mismo app, EU, LEB): el PM pidió las correcciones de árbol y demos para después del cierre.
+Cliente y personas omitidos. Paso a paso con Ignacio. Procedimientos en [[Perceptyx/procedimientos|procedimientos]] §
+Actualizaciones después del cierre, § Late adds (pasos 5 y 8) y § Resincronizar all_data.
+
+- ✅ **Toggle de LEB bloqueado:** en el evento cerrado, *Use LEB Data Collector* estaba encendido y con *"This setting
+  has been locked by the system administrator"*; *Preview Listening Event* deshabilitado. 📣 Elena (28/10): *"As survey is
+  closed — I don't think anything will be switched back to Live in LEB. You can do all changes in AR"*. Matiza la
+  práctica de *apagar y avisar* (regla 10, 📣 06/10 a confirmar): con el survey cerrado, Elena no lo exige. Se avisó igual
+  al PM que no previsualice ni reactive.
+- 🔍 **AR = Advanced Reporting** (el reporting site clásico, `index.cgi?rm=…`), deducido del contexto; no confirmado.
+- ✅ **Error de operador:** la primera captura de *Managed Settings* era **otro evento** del mismo master app (otro nombre,
+  otro `builder/<n>`). Lo delató el encabezado. Antes de tocar un toggle, verificar nombre del evento y app ID en *My
+  Surveys* (buscar por app ID).
+- ✅ **Árbol:** diagnóstico previo (2 casos del pedido + 1 desfasado de origen: un participante sin manager en prefill
+  colgado del *placeholder* `999999999`, que se dejó igual). Archivo armado **por SQL** (árbol actual con el `mgr_id`
+  corregido por `CASE` + el faltante por `UNION ALL`), control de filas (+1) y de huérfanos (0) antes de *Upload
+  Managers*. Contra el backup cambiaron solo las 2 filas pedidas. Sin `trend_emp_id` manuales.
+- ✅ **Regiones de 3 late adds de otras manos:** `pyx_region` / `pyx_detailed_region` / `pyx_extended_region` desde la
+  combinación única por `work_country` del resto de la base. `UPDATE` por SOS, *Preview* = 3 filas. Tercera vez del patrón
+  del 23/10 y 26/10.
+- ✅ **`0` sin espacio en prefill (3 filas, mismas altas) contra `0 ` en `resp_list`:** el sync avisa *"Don't have index
+  value … '0'"*. Se corrigió prefill con `WHERE col = '0' AND CHAR_LENGTH(col) = 1`, para no depender de cómo compara
+  la base los espacios finales (🔍 con PAD SPACE, `'0' = '0 '` da verdadero y el `UPDATE` agarraría todo).
+- ✅ **Sync (Test → Live):** 12 respondentes con `all_data` vacío (no 10 como el 26/10), más 2 de las altas en región y
+  `hire_type`. Verificación contra el backup: 12 / 14 / 14 / 12 cambios por demo y 0 vacíos.
+- ⚠️ **Otro DM reordenando el mismo survey a la vez (Andrea, 📣 28/10).** El segundo test de sync mostró, de golpe, 1.629
+  valores que cambiaban de opción y cientos de avisos en `02_32_07`. Rastros: un backup manual de `resp_list` de esa
+  mañana (`resp_list_backup<iniciales>…`) y seis `sos_dbtool_resp_list_*` en dos minutos. **Se excluyó `02_32_07` del
+  sync, pero el reorden también tocaba `02_50_07`, y ese demo entró en el sync en vivo.** Lo detectó el Q&I final.
+  Separación contra el backup: lo propio fueron 12 filas (vacío → valor); las otras 2.653 eran el remapeo correcto del
+  reorden. La lista de Andrea quedó reescrita a medias (textos de las primeras posiciones sobreescritos: faltan 15–21, 3–9
+  repetidos, `0` sin espacio). Se le pasó el diagnóstico; su sync de los dos demos recalcula todo, incluidas las 12.
+  🔍 Error de operador (Claude): supuso que el reorden era de un solo demo, en vez de preguntar cuáles eran.
+- ✅ **Cierre:** mensaje al PM con lo hecho, sin dar el Q&I por limpio (alertas de `02_32_07` y `02_50_07` por el reorden
+  en curso; 3 demos sin opciones, previos).
+
+**Para extraer a procedimientos** (pendiente): antes de un sync en vivo, buscar backups ajenos del día
+(`SHOW TABLES LIKE '%resp_list%'`, `'%_backup_%'`) y preguntar qué demos tocan; un test de sync que cambia de golpe entre
+dos corridas indica a otra persona escribiendo en el survey. Rearmar el árbol por SQL en vez de Excel. El filtro por
+`CHAR_LENGTH` para el `0 `.
+
+---
+
 ## 2026-10-27 — Bandas calculadas de edad y tenure + 3 late adds incompletos (LEB EU, cerrado)
 
 Tarea *Data – Calculated demo updates*, el mismo app del ticket del 19/10 (que se dejó para después del cierre). Cliente
