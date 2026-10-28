@@ -40,7 +40,7 @@ compuertas de abajo, marcando 🔍 cada paso que no salga de una sección.
 | Usuarios Manager / Manager Below Threshold | § Usuarios Manager |
 | Emails, traducciones, chequeo de integridad, Launch Audit | § Emails, traducciones y chequeos del app |
 | Alta de cliente, SSO, API, borrado de PII | sus secciones, por nombre |
-| **Cambiar la definición de las bandas de un demo calculado** (otros cortes de edad o tenure) | **Sin procedimiento escrito** (§ Pendientes). Lo más cercano: § Agregar un demográfico nuevo y § Reordenar |
+| **Bandas calculadas de edad o tenure** (crearlas o cambiar sus cortes) | § Agregar un demográfico nuevo › *Demo calculado desde una fecha* (✅ 27/10/2026). ~~Sin procedimiento escrito~~ SUPERSEDED 27/10 |
 | **User setup con varios status: empleados con la vista de su manager, umbral distinto por país, "replicar el survey anterior"** | **Sin procedimiento escrito** (§ Pendientes). Lo más cercano: § Usuarios Manager, solo para los status de manager |
 
 ## Compuertas antes de cualquier tarea que toque demográficos
@@ -441,6 +441,33 @@ tablas y después se actualiza `prefill_data` por SQL; o a mano tabla por tabla 
 olvidar un paso.
 
 ---
+
+### Demo calculado desde una fecha: Age Band / Tenure Band (tarea real, 27/10/2026)
+
+> ✅ App EU de LEB, **cerrado**, ~15.800 participantes y ~13.800 respuestas. Paso a paso con Ignacio. Cliente omitido.
+
+1. **¿Existe el demo?** Listar todos: `select l.resp_id, l.emerge_id, q.text from prefill_linkage l left join
+   resp_questions q on q.id = l.resp_id`. Ojo con los nombres engañosos: `band` es la banda de puesto, y
+   `manager_employee_id` aparece en un `LIKE '%age%'`. Si no existe, el pedido de *"update"* es **crear** dos demos.
+2. **Fechas en `AAAA-MM-DD`** (`regexp '^[0-9]{4}-[0-9]{2}-[0-9]{2}'`). Las vacías suelen ser late adds incompletos:
+   completarlas antes de calcular.
+3. **Fecha de corte:** la del lanzamiento (`min(sent_date)` de `emerge`). 🔍 Elegida por Claude (la tarea no la
+   daba). Se informa a la PM.
+4. **Previsualizar** con `timestampdiff(year, <fecha>, '<corte>')` + `CASE` agrupado: las bandas tienen que sumar el
+   total, sin menores de 18, ingresos futuros ni fechas vacías.
+5. **Exportar** `emp_id` + `Age Band` + `Tenure Band` (textos exactos del pedido) a CSV desde Querious.
+6. ***Operations Tools › Participant Data › Add / Update Demographics***: *Action* = **Add New Demographics**,
+   *Match Field* = `emp_id`, ***Statuses with access* es obligatorio** (si no, frena con *"Please select statuses
+   with access"*). Mirar `statuses.blocked_demos`: por defecto todos ven todo salvo lo bloqueado, así que se tildaron
+   todos. **Test Mode = Yes** primero.
+   - El test lista *"Clean up different case"* para todas las filas: no es error.
+   - ✅ **Crea la columna en `prefill_data`, el demo en `resp_questions` y las opciones, y *reconstruye `resp_list` y
+     `all_data`***: las respuestas ya existentes quedaron con su banda, sin sync aparte.
+7. **Orden:** las opciones quedan **alfabéticas**. La edad (`18-24`…`65+`) coincide con el orden lógico; la
+   antigüedad no. Se reescriben los textos en las posiciones (`UPDATE resp_list SET text = CASE seq …`) y enseguida
+   ***Sync reporting demographics*** de ese demo (test: todas las respuestas aparecen como discrepancia; después en
+   vivo). Verificado contando `all_data` por posición contra `prefill_data`.
+8. **Q&I** al final.
 
 ## Reordenar las opciones de un demográfico
 
@@ -1622,6 +1649,12 @@ el resto en No). ✅ Lo que marcó:
    falla, consultarlo antes de reintentar.
 5. ✅ ***Reference Reports › Manager Hierarchy Tree*** (`rm=managers_tree`) **› Settings** → *CEO
    emp_id* + *Choose File* → ***Upload Managers***. Reconstruye el árbol completo.
+   ✅ **El archivo va sin encabezado** (27/10/2026): con encabezado, frena con *"Orphaned employee ID: emp_id"* y no
+   escribe. Columnas `emp_id, first_name, last_name, mgr_id`, separadas por tab. No incluir la fila `emp_id = 0`, que
+   el sistema recrea. Control de huérfanos **con `LEFT JOIN`**, no con `lower(...) NOT IN (subquery)`, que con ~16k
+   filas hace *timeout*:
+   `select count(*) from managers_tree t left join managers_tree m on m.emp_id = t.mgr_id where t.emp_id <> '0' and
+   t.mgr_id <> '0' and m.emp_id is null;`
 6. ⚠️ **El rebuild pierde los `trend_emp_id` puestos a mano.** Antes de subir, ver si `managers_tree`
    tiene `trend_emp_id` distinto del natural; en el caso, uno. Después, restaurarlo desde el backup
    (`select * from managers_tree_<fecha> where emp_id = …` → `UPDATE`; con muchos, un `JOIN`).
@@ -2505,7 +2538,7 @@ que Ignacio no tiene acceso**: no se pudo verificar):
 - **Late add: orden de las primeras columnas del archivo.** ¿El Data File Builder exige `emp_id, first_name,
   last_name, email, mgr_id` al inicio, o alcanza con que las columnas existan? Sin resolver (🔍).
 
-- **Cambiar la definición de las bandas de un demo calculado** (pedido del cliente con cortes propios de
+- ~~**Cambiar la definición de las bandas de un demo calculado**~~ **SUPERSEDED 27/10/2026**: resuelto como *crear* el demo (§ Agregar un demográfico nuevo › Demo calculado desde una fecha). Queda abierto solo *cambiar los cortes de una banda que ya tiene respuestas*. Texto original: (pedido del cliente con cortes propios de
   edad o tenure, a partir de la fecha de nacimiento o de ingreso). Apareció el 19/10/2026 con el survey en
   vivo → se trabaja después del cierre (📣 Ignacio). Sin ver todavía: si se reescriben las opciones de
   `resp_list` o se crea un demo nuevo; cómo se recalcula la banda de cada participante (¿*Add / Update

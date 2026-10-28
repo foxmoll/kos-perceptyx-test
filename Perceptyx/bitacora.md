@@ -7,6 +7,28 @@ Cuando algo de acá cambia, no se borra: se marca `SUPERSEDED (fecha)` y se enla
 
 ---
 
+## 2026-10-27 — Bandas calculadas de edad y tenure + 3 late adds incompletos (LEB EU, cerrado)
+
+Tarea *Data – Calculated demo updates*, el mismo app del ticket del 19/10 (que se dejó para después del cierre). Cliente
+omitido. Paso a paso con Ignacio. Procedimiento nuevo en [[Perceptyx/procedimientos|procedimientos]] § Agregar un
+demográfico nuevo › Demo calculado desde una fecha.
+
+- ✅ **No había bandas:** `band` es de puesto. *"Update"* = crear Age Band (`02_33_07`) y Tenure Band (`02_34_07`). Corte
+  08/10/2026 (lanzamiento). 15.825 participantes y 13.816 respuestas con banda.
+- ✅ ***Add / Update Demographics*** pide statuses, crea el demo y reconstruye `all_data`. Tenure quedó alfabética:
+  textos reescritos + sync.
+- ✅ **3 late adds incompletos** (sin fechas ni demos): `UPDATE` por SOS desde el archivo de la PM, **traduciendo
+  formatos** (`TRUE` → `1`, `12,1` → `12.1`, fechas a `AAAA-MM-DD`). Ya habían respondido: *Add missing demographic
+  options* (3 demos) + sync de 20 demos. Un demo faltó en la primera lista (lo detectó el test contra el Q&I).
+- ✅ **El sync es por demo para todos:** arrastró 2 respondentes de *Abu Dhabi OC* a *Doha OC* (dato de origen) y 7
+  vacíos de `absent`. 📣 Ignacio: incluirlo y avisar a la PM.
+- ✅ **Árbol:** 2 nuevos agregados con *Upload Managers* (sin encabezado); se perdió el único `trend_emp_id` manual
+  (1 → 0) y se restauró. Q&I final: solo 2 cuentas de prueba en `emerge`.
+- 🔍 **Para la PM:** fechas, nombre e IDs de manager cargados como demos reportables; el status *Manager* no bloquea
+  `birth_date` (*admin* y *hr+* sí).
+
+---
+
 ## 2026-10-27 — Archivo final con muestra cargado por LEB (EU, draft): 113 columnas con el límite subido
 
 Sigue la tarea del 26/10 (audit FAILED por 113 columnas). 📣 La PM: *"this customer is already known to have over 99
