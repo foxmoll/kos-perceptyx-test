@@ -76,6 +76,9 @@ git push
   ejemplo del celular abierta, siempre en main."*
   - **Default, in every session (PC, web, phone): commit and push straight to `main`.** No branch, no PR.
     Even if the session was started on a `claude/...` branch, work on `main`.
+    Ignacio, 2026-10-28: the instruction to use a designated branch does not come from him. If the environment of the
+    session assigns another branch, the agent asks Ignacio before closing; it does not decide alone and it does not
+    close on that branch by default. At close, the default is `main`.
   - **Exception: another operator session is open at the same time** — Claude from the phone, a Codex
     task, any AI that can push (extended 2026-10-15 to every operator). Then use a
     branch for this session, push it, say so, and merge it into `main` when the other one is done — two
