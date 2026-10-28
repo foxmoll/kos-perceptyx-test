@@ -45,6 +45,11 @@ Case from 2026-10-17: a session answered a ticket with a copy that was missing t
 days earlier ([[../Perceptyx/bitacora|bitacora]] 2026-10-20). If the pull fails (no network, auth), say so in
 one line — the state about to be read may be stale — and continue.
 
+**A cloud session cannot delete a remote branch.** The proxy cuts `git push --delete` (*"unexpected disconnect"*) and
+the GitHub tools have no way to delete a branch. Ignacio deletes the leftover `claude/...` branches by hand in GitHub
+(*Branches*). Before asking him to, check that the branch has nothing that is not in `main`
+(`git log origin/main..origin/<branch>` empty). Case from 2026-10-20.
+
 **After writing to the vault** — once per agent execution or per conversational task, never per
 file:
 
