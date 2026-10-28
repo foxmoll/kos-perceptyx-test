@@ -42,6 +42,7 @@ compuertas de abajo, marcando 🔍 cada paso que no salga de una sección.
 | Alta de cliente, SSO, API, borrado de PII | sus secciones, por nombre |
 | **Bandas calculadas de edad o tenure** (crearlas o cambiar sus cortes) | § Agregar un demográfico nuevo › *Demo calculado desde una fecha* (✅ 27/10/2026). ~~Sin procedimiento escrito~~ SUPERSEDED 27/10 |
 | **User setup con varios status: empleados con la vista de su manager, umbral distinto por país, "replicar el survey anterior"** | **Sin procedimiento escrito** (§ Pendientes). Lo más cercano: § Usuarios Manager, solo para los status de manager |
+| **Reporting Account Update: cambiar la vista demográfica de un usuario** | **Sin procedimiento escrito.** Un caso: [[Perceptyx/bitacora\|bitacora]] 2026-10-28 (*Reporting Account Update*). Piezas en § Usuarios Manager (`users.view`, User Editor). Ojo: el constructor no repite un demo en un grupo OR, y SOS no escribe en `users` |
 
 ## Compuertas antes de cualquier tarea que toque demográficos
 
@@ -2134,6 +2135,10 @@ columna *Responses*, **no** *Completions*. No se reinterpreta el pedido.
      Based*** (🔍 = `username_view`) · *Comparison Views*; al pie, *Summary of Access*. Obligatorios: *Profile
      Username*, *First/Last Name*, *Status*, *Employee ID*, *Theme* (Default), ***Inactive User* — viene
      tildado por defecto**. Opcionales: email, password (*Make Password Permanent*), `sso_id`.
+   - ✅ **Vista demográfica: *Change View* no repite un demo en un grupo OR** (28/10/2026). El constructor arma con
+     *Further Refine View* (🔍 AND) y *Expand Filter* (🔍 OR), pero después de *Expand Filter* oculta los demos ya
+     usados. Una vista `(A AND B) OR C` con A y C sobre el mismo demo va por `UPDATE` de `users.view` (SOS no lo corre;
+     hace falta alguien con escritura). Caso en [[Perceptyx/bitacora|bitacora]] 2026-10-28.
    - 🔍 El `username` de los usuarios existentes **no es la parte local del email** (difieren en letras y
      números): no derivarlo del email sin ver el patrón en usuarios `mgr` existentes.
 6. **Verificar:** *Quality and Integrity Checks* (*Include details* = sí) y *Launch Audit* en modo `users`.

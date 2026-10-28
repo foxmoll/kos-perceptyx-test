@@ -61,6 +61,9 @@ Undo."* Un `INSERT` de 3 filas en `prefill_data` entró con *Preview change* cua
 (`sos_dbtool_<tabla>_<AAAAMMDD_hhmmss>`), y corre en tandas. **Con muchas filas pide escribir el nombre de la tabla**
 para confirmar. Si el `WHERE` no encuentra nada, no deja correr (*"matches 0 rows"*). En `resp_list` avisa que
 **reconstruye el *survey setup file*** después del cambio.
+✅ **No escribe en tablas con dependientes en cascada (28/10/2026):** un `UPDATE` en `users` se rechazó con *"password_history
+has a foreign key to users with ON UPDATE CASCADE… DB Tools backs up and undoes only users itself, so it won't run this.
+Ask an engineer."* Lo rechaza aunque el cambio no toque la clave. Caso en [[Perceptyx/bitacora|bitacora]] 2026-10-28.
 Lo de *"solo lectura"* de abajo queda `SUPERSEDED (23/10/2026)` para escrituras: 🔍 no se sabe desde cuándo.
 
 ✅ **Database Tools en uso (call de Jackie, 08/10):** un `CREATE TABLE` devuelve ***"Only select queries

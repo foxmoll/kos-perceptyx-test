@@ -7,6 +7,37 @@ Cuando algo de acá cambia, no se borra: se marca `SUPERSEDED (fecha)` y se enla
 
 ---
 
+## 2026-10-28 — Reporting Account Update: vista demográfica con OR sobre el mismo demo (LEB EU, cerrado)
+
+Tarea *Reporting Account Update*: sumar a la vista de un usuario de reportes un segundo grupo, `(A AND B) OR C`, con A y
+C sobre el mismo demo. Cliente y personas omitidos. Paso a paso con Ignacio. **Sin procedimiento escrito**: se armó desde
+[[Perceptyx/procedimientos|procedimientos]] § Usuarios Manager (tabla `users`, User Editor).
+
+- ✅ **Dónde vive la vista:** `users.view` (condición sobre `all_data` con **posiciones** de `resp_list`), `view_name` y
+  `view_disp`. Formato que deja el User Editor: `( 02_19_07=1 AND 02_20_07=3 ) OR ( 02_19_07=4 )`, sin comillas, un
+  paréntesis por grupo. La vista previa del usuario tenía otro formato (comillas y un `/* AND */` colgando): 🔍 escrita a
+  mano o con otra herramienta.
+- ✅ **Lectura del pedido:** `A AND B OR C` = `(A AND B) OR C`. La otra lectura exige dos valores del mismo demo a la vez.
+- ✅ **Control antes de escribir:** contar respondentes con la vista actual y con la nueva (`SUM(<condición>)` sobre
+  `all_data`): 26 → 1.104. Si dieran iguales, la opción agregada no tiene respondentes y va al PM.
+- ✅ **El constructor del User Editor no puede repetir un demo en un grupo OR.** *Data Access: Demographic Based* muestra
+  *SQL View* y *Full View Description* (solo lectura), *Display View Name* (editable) y *Change View* / *Remove View*.
+  *Change View* abre *Demographic View*: arranca vacío (reemplaza la vista) y arma con *Further Refine View* (🔍 = AND) y
+  *Expand Filter* (🔍 = OR). Después de *Expand Filter* la lista (*"Select Another Demographic"*) **no ofrece los demos ya
+  usados** (📣 Ignacio: Opco no aparece) y también oculta otros (*Level 3* a *8*). No hay forma equivalente sin repetir el demo.
+- ✅ **SOS › Database Tools no escribe en `users`:** *"password_history has a foreign key to users with ON UPDATE CASCADE…
+  DB Tools backs up and undoes only users itself, so it won't run this. Ask an engineer."* No escribió nada. 🔍 El
+  `UPDATE` era seguro (no cambia `username`, la clave de la que cuelga `password_history`), pero la herramienta no lo distingue.
+- ✅ **Querious EU tampoco tiene `UPDATE`** en la conexión de Ignacio: *"UPDATE command denied"* (antes, `INSERT` el 23 y
+  26/10). 🔍 La conexión RW de EU no escribe en ningún caso.
+- ✅ **Resolución:** 📣 Elena corrió el `UPDATE` (backup previo de `users` hecho por la app). Verificado: la fila tiene la
+  vista nueva y, contra el backup, cambió solo esa fila.
+- 🔍 **Pregunta a Elena sin respuesta registrada:** si `users.view` es el único lugar donde vive la vista o si algo (LEB
+  *Edit Reporting Access*, UDS) puede regenerarla. Lo que dice el vault: los toggles de LEB no tocan `users`, y por binlog
+  desde `users` a UDS va el *mapping*, no la condición.
+
+---
+
 ## 2026-10-28 — Correcciones post-cierre (árbol, regiones, sync) en un survey LEB con otro DM trabajando en paralelo
 
 Sigue el late add del 26/10 (mismo app, EU, LEB): el PM pidió las correcciones de árbol y demos para después del cierre.
