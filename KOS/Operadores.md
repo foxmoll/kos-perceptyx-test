@@ -134,6 +134,35 @@ Claude y cualquier otro operador tienen el mismo riesgo.
 
 Para medirlo: prueba 7 del `README.md`, el mismo ticket en una conversación nueva de Antigravity.
 
+## Antigravity — segunda prueba: late add real (2026-10-23)
+
+Ticket de late add (3 personas, survey LEB vivo, app EU). Antigravity llevó los pasos 1–2 y **se quedó sin tokens**;
+Ignacio pegó la conversación en Claude Code, que la contrastó con el vault antes de seguir. Detalle del ticket en
+[[Perceptyx/bitacora|bitacora]] 2026-10-23.
+
+**Lo que mejoró con los cambios del 19/10:** abrió con la tabla de compuertas y cada fila con su fuente, ubicó el ticket
+en el mapa y no propuso cortar el survey vivo. 🔍 Las compuertas y el mapa hicieron su trabajo.
+
+**Lo que siguió fallando**, otra vez en datos que viven dentro de una sección larga:
+
+| Error de Antigravity | Lo que dice el vault |
+|---|---|
+| Compuerta LEB en verde sin mirar el toggle *Use LEB Data Collector* | La compuerta es rojo si el toggle está encendido; importa recién al agregar opciones de demo (paso 7) |
+| Queries de "ya están" con los IDs tal como vienen | § Late adds, paso 1: `emp_id` en minúsculas, comparar con `lower()` |
+
+**El handoff funcionó**: pegar la conversación de un operador en otro, y que el segundo la verifique contra el vault antes
+de seguir, recuperó el ticket sin perder pasos. 🔍 Es un uso posible de tener varios operadores: el segundo audita.
+
+**Errores del segundo operador (Claude) en el mismo ticket**, todos detectados por la pregunta de Ignacio
+*"¿Elena hizo eso?"* ([[KOS/Reglas|Reglas]] § 1, *"¿esto lo dedujiste?"*):
+- presentó como paso del procedimiento dos inferencias (copiar `auth` a `prefill_data`, completar `sso_id` "porque sí");
+  la primera resultó innecesaria y la segunda estaba bien, pero ninguna era un paso escrito;
+- dio una instrucción ambigua (*"pasar a minúsculas"*, en vez de *"el nombre exacto de la tabla"*) que costó dos vueltas
+  del builder;
+- afirmó una causa (columna `emp_id_1` pegada desde Excel) que era del builder.
+
+🔍 La pregunta de Ignacio sigue siendo el control que más rinde, con cualquier operador.
+
 ## Agregar un operador nuevo
 
 1. Un adaptador fino que lleve a `KOS/Bootstrap.md`, en el formato que esa IA cargue sola.
