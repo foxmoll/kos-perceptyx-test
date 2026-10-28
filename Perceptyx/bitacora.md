@@ -7,6 +7,31 @@ Cuando algo de acá cambia, no se borra: se marca `SUPERSEDED (fecha)` y se enla
 
 ---
 
+## 2026-10-21 — Reporte de Leaders of Leaders del 862013: el adjunto era otra lista (corrección)
+
+Revisión de un caso de Wailam (Slack, 21/10): el PM pidió verificar el reporte que mandamos en el cierre del 862013
+y comparó con un archivo de 2025 del mismo reporte. Cliente, personas y app omitidos.
+
+- ✅ **El archivo adjunto al cierre no era el reporte de Leaders of Leaders.** Eran 101 filas de vistas de comparación
+  (80 My Leader + 21 My Business Unit), o sea la lista de vistas dentro de umbral, con `user_completions` y
+  `comparison_completions`. Solo 25 filas tenían diferencia de 0 o 1 y 4 tenían diferencias de decenas de miles.
+  Las idénticas no cuadran con el comentario del cierre (3 My Leader contra 4 My Business Unit anunciadas; el archivo
+  tenía 0 My Business Unit).
+- ✅ **Formato del reporte de 2025** (archivo de referencia): una fila por par (líder de líderes, manager de su descendencia),
+  con `username`, `status`, `emp_id`, `# Completions In Hierarchy`, `their mgr_id`, `username of leader`, `status2`,
+  `# Completions In Hierarchy3` y `# diff`.
+- 🔍 **Definición inferida del ejemplo de 2025:** las dos columnas de conteo son *hierarchy completions* (no
+  `user_completions`), y `diff = completions del LoL − completions del manager` (12 − 11 = 1). El vínculo sería
+  manager directo (`their mgr_id` = `emp_id` del LoL). Un solo ejemplo: confirmar con el PM.
+- 🔍 **Cómo armarlo:** `get-mgr-counts` (columna *hierarchy completions*, verificada por encabezado), lista de cuentas
+  `leader_of_leaders`, pares directos, cruce y filtro `|diff| ≤ 1`. Los open roles (IDs no numéricos) quedan aparte hasta
+  que el PM decida. Pasos completos en la conversación del 21/10; no se corrió en la base.
+- ⚠️ **Pendiente:** responder al PM (mensaje en inglés, sin enviar) y generar el reporte correcto con acceso a la base.
+- 📣 Ignacio, 21/10: la fórmula de concatenación `TEXTJOIN` para listas `IN (…)` queda en
+  [[Perceptyx/procedimientos#Parte 2.1 — Contar: `get-mgr-counts`|procedimientos § Parte 2.1]] (sin probar; sin commit por decisión de Ignacio).
+
+---
+
 ## 2026-10-15 — Ticket 862013: user setup de dos status con controles de integridad (cierre reportado, sin verificar)
 
 Trabajo hecho el 15/10 y **no registrado en el vault en su momento**. Esta entrada sale de los comentarios de cierre
@@ -35,7 +60,7 @@ Pedido: ver [[Perceptyx/procedimientos|procedimientos]] § Usuarios Manager (el 
 - ⚠️ **Método distinto del procedimiento:** *Quality and Integrity Checks* expiró en la verificación de vistas de
   comparación (unas 13.000 vistas). La lista de dentro de umbral se calculó directo desde la base con las completions de
   jerarquía, no desde el check.
-- 📣 El reporte de Leaders of Leaders (diferencia de 0 o 1 completions) se adjuntó al cierre. No está en el vault.
+- ~~📣 El reporte de Leaders of Leaders (diferencia de 0 o 1 completions) se adjuntó al cierre. No está en el vault.~~ SUPERSEDED (2026-10-21): el archivo adjunto era la lista de vistas de comparación, no el reporte. Ver la entrada del 21/10 arriba.
 
 ---
 
