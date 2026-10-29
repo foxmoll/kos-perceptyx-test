@@ -1978,7 +1978,7 @@ Síntoma: un texto sale en inglés **en todos los idiomas** aunque en el Transla
 - **La causa vista:** el párrafo quedó envuelto en `<p style="text-align: left">…</p>` (alineación puesta en LEB) y la
   frase traducida era el texto plano.
 - **El Translation Tool no sirve para arreglarlo:** *Edit English* rechaza el atributo `style`.
-- **Arreglo usado:** backup de `need_translation` y `translated_phrases`, después por **SOS › Database Tools › Update**:
+- **Arreglo usado** (📣 el cliente confirmó que el agradecimiento salió traducido, 29/10): backup de `need_translation` y `translated_phrases`, después por **SOS › Database Tools › Update**:
 
 ```sql
 UPDATE <app>.need_translation

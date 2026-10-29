@@ -27,7 +27,7 @@ Trabajado paso a paso con Ignacio. Cliente omitido. Procedimiento en
   **SOS › Database Tools › Update** (*Preview change*: 1 fila, backup `sos_dbtool_need_translation_<fecha_hora>`).
   Verificado: largo 180, `md5_ok = 1`, 18 traducciones enlazadas. Compuerta LEB en verde (*Use LEB Translations*
   apagado, Mosaic apagado).
-- 🔍 **No se vio la página renderizada:** se propuso que el cliente la verifique. Probarla internamente en un survey en
+- ~~🔍 **No se vio la página renderizada:** se propuso que el cliente la verifique.~~ 📣 **El cliente confirmó que quedó bien** (Ignacio, 29/10). Internamente no se vio: Probarla internamente en un survey en
   vivo deja una respuesta (respondente de prueba) o sincroniza LEB → DC (*Preview*).
 - 📣 Ignacio, 29/10: **en Querious no tiene escritura, ni en EU ni en US; en SOS sí, en los dos.** Ver
   [[Perceptyx/plataforma|plataforma]] § Accesos.
