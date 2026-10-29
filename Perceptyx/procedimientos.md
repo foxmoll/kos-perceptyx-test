@@ -1965,6 +1965,39 @@ Lo que contó Jackie:
 **Troubleshooting típico:** *"está la frase pero no sale traducida"* → casi siempre el **inglés cargado a
 mano no coincide** con el programado.
 
+**Caso: formato agregado en el editor** (✅ ticket del 29/10/2026, app LEB EU en vivo, DC Amsterdam; [[Perceptyx/bitacora|bitacora]]).
+Síntoma: un texto sale en inglés **en todos los idiomas** aunque en el Translation Tool figure 🟢 *Translated*.
+
+- **Cómo se enlaza** (✅): la traducción se busca por el texto **entero** que está dentro de `obj.translate_this('…')`,
+  hasheado como `md5(lower(texto))` → `need_translation.english_value_md5`; las traducciones cuelgan de
+  `translated_phrases.original_id` = `need_translation.sequence`. Si el texto programado cambia, aunque sea un tag, el
+  hash no coincide y sale el inglés.
+- **Dónde mirar lo programado:** el agradecimiento de DC Amsterdam está en `filestorage`,
+  `filename = '/templates/dc/amsterdam_page_complete.html'`. `content` es BINARY: leerlo con
+  `CONVERT(content USING utf8mb4)`.
+- **La causa vista:** el párrafo quedó envuelto en `<p style="text-align: left">…</p>` (alineación puesta en LEB) y la
+  frase traducida era el texto plano.
+- **El Translation Tool no sirve para arreglarlo:** *Edit English* rechaza el atributo `style`.
+- **Arreglo usado:** backup de `need_translation` y `translated_phrases`, después por **SOS › Database Tools › Update**:
+
+```sql
+UPDATE <app>.need_translation
+SET english_value     = '<inglés exacto del tag, con sus tags>',
+    english_value_md5 = '<md5(lower(ese texto)), calculado aparte>'
+WHERE sequence = <sequence>;
+-- verificación
+SELECT CHAR_LENGTH(english_value), MD5(LOWER(english_value)) = english_value_md5 AS md5_ok
+FROM <app>.need_translation WHERE sequence = <sequence>;
+SELECT COUNT(*) FROM <app>.translated_phrases WHERE original_id = <sequence>;
+```
+
+- Las traducciones quedan sin el formato (en este caso, sin la alineación). La otra vía es sacar el formato en LEB, pero
+  toca contenido del survey y LEB vuelve a publicar (regla 10). 🔍 Si alguien abre después *Edit English* en esa frase, la
+  herramienta le pide quitar el `style`: no hay que hacerle caso.
+- Snippet ✅ ***Update translation MD5*** (`;md5`): `UPDATE need_translation SET english_value_md5 =
+  md5(lower(english_value)); UPDATE translated_phrases SET translated_value_md5 = md5(lower(translated_value));`
+  (recalcula **toda** la tabla, sin `WHERE`).
+
 ### Lo que dijo Jackie de paso (21/09)
 
 - **Jails:** el de producción y el **local de test** de cada uno; *"geniales cuando andan"*. **Los locales

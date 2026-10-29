@@ -79,7 +79,7 @@ herramienta vieja**. 🔍 Los cruces son lectura propia salvo donde la guía dic
 
 | Antes | En SOS | Notas |
 |---|---|---|
-| Querious (consultas) | **Toolbox › Database Tools** | ⚠️ **Solo lectura** (réplicas US/EU) — **lo único de SOS que es solo lectura** al 06/10 (📣 Ignacio; matiz del 08/10 en § Lectura o escritura). **Al 06/10 las escrituras siguen en Querious** hasta que SOS habilite escritura (📣 Ignacio) |
+| Querious (consultas) | **Toolbox › Database Tools** | ⚠️ **Solo lectura** (réplicas US/EU) — **lo único de SOS que es solo lectura** al 06/10 (📣 Ignacio; matiz del 08/10 en § Lectura o escritura). ~~**Al 06/10 las escrituras siguen en Querious** hasta que SOS habilite escritura (📣 Ignacio)~~ SUPERSEDED (29/10/2026): 📣 Ignacio, Database Tools escribe en EU y US; Querious queda de solo lectura para él |
 | Jail + git + `mac.cron_scripts` | **Launch › Cron Manager** | Dashboard de errores, *Cron Builder* con plantillas, *Cron Review*, *Scheduler* (horario + rerun), *Script Editor*. *Burndown* (próximamente): pasar crons custom a **sensores de lifecycle de LEB** |
 | MAC trend setup + `trend_custom_linkages` a mano | **Reporting › Trend Mapping** | ✅ *"replaces mac trend setup"*: apps trendeadas, preguntas, demos y opciones en una herramienta, con sugerencias y mapeos custom; exporta el documento de trend |
 | Tablas `new_menus` / `new_menu_options` | **Reporting › Menus** | ✅ Reemplazo explícito; drag & drop, versiones, permisos por rol |
@@ -278,7 +278,8 @@ herramienta vieja**. 🔍 Los cruces son lectura propia salvo donde la guía dic
 
 - ~~🔍 **Cómo se hace en SOS una escritura que antes era un `UPDATE` en Querious**~~ **Respondida 06/10**
   (📣 Ignacio): **hoy las escrituras se siguen haciendo en Querious**, hasta que SOS habilite lectura y
-  escritura. La consolidación está en curso, no terminada.
+  escritura. La consolidación está en curso, no terminada. SUPERSEDED (29/10/2026): las escrituras van por SOS ›
+  Database Tools en EU y US (📣 Ignacio); en Querious no tiene escritura.
 - ~~🔍 **WTC** (un rol) y **Mosaic** / **DC vNext**: sin definir.~~ Resueltos 06/10 (ver
   [[Perceptyx/plataforma|plataforma]] § Glosario y [[Perceptyx/dc-mosaic|dc-mosaic]]).
 - ~~**Customizations**: ¿solo lectura o edición + push?~~ ✅ 06/10 (📣 Ignacio): edición + push. **Lo único de solo lectura en SOS son las queries a las bases.**

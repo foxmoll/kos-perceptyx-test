@@ -7,6 +7,35 @@ Cuando algo de acá cambia, no se borra: se marca `SUPERSEDED (fecha)` y se enla
 
 ---
 
+## 2026-10-29 — Thank you page en inglés en todos los idiomas (LEB EU, en vivo, DC Amsterdam)
+
+Ticket del cliente: *"Thank you text comes up in English for all languages"*; dijo que intentó corregirlo él mismo.
+Trabajado paso a paso con Ignacio. Cliente omitido. Procedimiento en
+[[Perceptyx/procedimientos#Traducciones|procedimientos § Traducciones]], *Caso: formato agregado en el editor*.
+
+- ✅ **La frase estaba traducida** (🟢 *Translated*, 18 idiomas, Microsoft, 06/10) y aun así salía en inglés.
+- ✅ **Causa:** el template (`filestorage`, `/templates/dc/amsterdam_page_complete.html`, `content` en BINARY) tenía
+  dentro del translation tag `<p style="text-align: left">…</p>`; `need_translation` tenía el texto plano. El app busca la
+  traducción del texto **entero** del tag. 🔍 La alineación la agregó el cliente en LEB después de juntar las frases.
+- ✅ **Cómo se busca y enlaza una traducción:** `need_translation.english_value_md5 = md5(lower(english_value))` (snippet
+  `;md5`; verificado: el MD5 guardado coincide con ese cálculo y no con `MD5()` sin `lower`);
+  `translated_phrases.original_id` = `need_translation.sequence`. En `translated_phrases`, `english_value` y
+  `english_value_md5` quedan en NULL.
+- ✅ ***Edit English* del Translation Tool rechaza el atributo `style`** (*"Please remove disallowed attributes (style)"*).
+- ✅ **Arreglo:** backup de `need_translation` y `translated_phrases` por *Operations Tools › Utilities › Backup table*;
+  después `UPDATE` de `english_value` (inglés exacto del tag) y `english_value_md5` (calculado aparte) en la fila, por
+  **SOS › Database Tools › Update** (*Preview change*: 1 fila, backup `sos_dbtool_need_translation_<fecha_hora>`).
+  Verificado: largo 180, `md5_ok = 1`, 18 traducciones enlazadas. Compuerta LEB en verde (*Use LEB Translations*
+  apagado, Mosaic apagado).
+- 🔍 **No se vio la página renderizada:** se propuso que el cliente la verifique. Probarla internamente en un survey en
+  vivo deja una respuesta (respondente de prueba) o sincroniza LEB → DC (*Preview*).
+- 📣 Ignacio, 29/10: **en Querious no tiene escritura, ni en EU ni en US; en SOS sí, en los dos.** Ver
+  [[Perceptyx/plataforma|plataforma]] § Accesos.
+- Error del operador, para no repetir: Claude probó el MD5 sin `lower()` y leyó `md5_ok = 0` como evidencia. Antes de
+  usar un hash como prueba, confirmar cómo se calcula.
+
+---
+
 ## 2026-10-27 — Bandas calculadas de edad y tenure + 3 late adds incompletos (LEB EU, cerrado)
 
 Tarea *Data – Calculated demo updates*, el mismo app del ticket del 19/10 (que se dejó para después del cierre). Cliente

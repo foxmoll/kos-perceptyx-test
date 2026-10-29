@@ -7,7 +7,7 @@
 | Idioma de respuesta | Español rioplatense | 📣 Ignacio, 16/10 |
 | Modo de guía por defecto | Preguntar cada vez (paso a paso o completa) | 📣 Ignacio, 17/10 ([[KOS/Reglas\|Reglas]] § 9) |
 | Nivel de detalle | Intermedio: pasos con SQL y fórmulas listas para copiar, con el porqué cuando hay una decisión | 📣 Ignacio, 09/10 |
-| Herramientas con acceso | Querious, SOS, OnDemand (app), Transmit, Excel con helper formulas en Descargas | ✅ [[Perceptyx/plataforma\|plataforma]] |
+| Herramientas con acceso | Querious (**solo lectura**, EU y US — 📣 29/10), SOS (escritura por Database Tools, EU y US — 📣 29/10), OnDemand (app), Transmit, Excel con helper formulas en Descargas | ✅ [[Perceptyx/plataforma\|plataforma]] |
 
 ## Notas
 
