@@ -13,3 +13,5 @@
 
 - **Preguntas de a una por mensaje**, sin análisis intercalado (📣 17/10). Es regla de equipo; queda acá porque salió de él.
 - Mantiene el KOS: revisa los PRs y corre Reflect (📣 16/10, [[Perceptyx/_indice|_indice]] § Proyecto: KOS de equipo).
+- **Excel en inglés con separador `;`** (fórmulas listas así). Find & Replace de Excel no tiene regex. **No usa BBEdit**: no
+  dar pasos en BBEdit ni con regex (📣 29/10, [[Perceptyx/bitacora|bitacora]] 2026-10-29).

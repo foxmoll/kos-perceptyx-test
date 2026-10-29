@@ -7,6 +7,48 @@ Cuando algo de acá cambia, no se borra: se marca `SUPERSEDED (fecha)` y se enla
 
 ---
 
+## 2026-10-29 — Corrección de jerarquía y posición en un survey en vivo, con master y feed HRIS (LEB EU, cerrado)
+
+Tarea de actualización de demos (Position ID, Position name, LV1–LV12) desde un archivo del cliente, en el survey en vivo
+y en la tabla master del cliente. *"Blank spaces → blank"*. Cliente y personas omitidos. Paso a paso con Ignacio. Sin
+procedimiento escrito para survey en vivo: piezas de [[Perceptyx/procedimientos|procedimientos]] § Actualizaciones
+después del cierre y § Resincronizar `all_data`.
+
+- ✅ **Compuerta de survey en vivo (regla 2):** 📣 Jackie aprobó la excepción y dio el método (renombrar encabezados según
+  `prefill_linkage`, *Add/Update Demographics* con *Update Existing* matcheando `emp_id`, sync solo de esos demos, Q&I;
+  master por SOS). LEB Data Collector encendido; ella lo sabía.
+- ✅ **El servidor de Certinia estaba mal:** decía US, la base estaba en EU. Buscar la base en los dos antes de concluir.
+- ✅ **El archivo usaba otros nombres de columna** que `prefill_data` (`iam_id`, `LVn_iam_id`, `LVn_Manager_name`,
+  `LVn_Position_id`, con `LV10–12Position_id` sin guion bajo). Mapa: `lvln_column1..4` = iam id, manager name, position
+  id, position name. 🔍 Error de operador (Claude): dio encabezados con la *n* como marcador y la falta del guion bajo
+  como nota al pie; Ignacio los tomó literales. Dar siempre la fila completa explícita.
+- ✅ **Add/Update Demographics no corre con el survey en vivo:** *"ERROR: The survey is live…"*, también sin Test Mode.
+  El método de Jackie no se pudo usar como tal. Se resolvió con `UPDATE` por SOS.
+- ✅ **SOS › Database Tools acepta una sentencia por corrida** (varias `INSERT` sí, si van a la misma tabla y columnas).
+  Se generaron en Excel con una hoja auxiliar (una celda por columna + `TEXTJOIN` por fila; `TEXTJOIN` sobre todo el
+  rango da *"Text too long"*) y se corrieron de a una: 54 en la master, 12 en el survey (13 filas: un `emp_id` está
+  duplicado entre carga manual y feed). Cada una deja su `sos_dbtool_<tabla>_<ts>`. Verificación: contar esas tablas y
+  controles puntuales. 🔍 Error de operador (Claude): primero propuso `IS NOT NULL` como control, que ya era cierto antes.
+- ✅ **El `prefill_data` del survey tiene un feed `hris_v2` activo** (8 de las 12 personas vienen de ahí): una carga futura
+  puede pisar las correcciones. Se avisó al PM.
+- ✅ **Un ID del archivo no existe en ningún lado** pero figura como manager de LV4 de otra persona. Al PM (regla 8).
+- ⚠️ **El sync es por demo y para todos los respondentes.** Corrido en vivo por error (no en Test Mode) con *blank out* =
+  Yes sobre 50 demos: contra el backup de `all_data` tomado antes, cambiaron **237 filas**: 5 de las 4 personas del
+  archivo que habían respondido, y **232 de otros respondentes** realineados a su prefill actual (🔍 cambios del feed
+  posteriores a su respuesta). Se informó al PM con la opción de revertir desde el backup. 7 valores no entraron por
+  falta de opción.
+- ✅ ***Create demographic options from participant data* reconstruye la lista y re-indexa**; falla en los demos con
+  views o filtros guardados (*"752 user(s) with a view based on this demo…"*) y sugiere *Add missing*. En un survey con
+  respuestas no se usa (`all_data` guarda posiciones). ***Add missing demographic options…*** solo agrega, uno por vez.
+- ✅ **Cierre:** *Add missing* en 9 demos (test → vivo), backup nuevo de `all_data`, re-sync de esos 9 con *blank* = No
+  (test: exactamente los 7 valores), Q&I sin alertas en los demos tocados. Lo que quedó en el Q&I ya estaba (tildes
+  duplicadas, fechas del feed, sso duplicados, 4 filas de position name vacías en prefill que el sync no tocó).
+- ✅ **Herramientas de Ignacio:** Excel con nombres de función en inglés y `;`; Find & Replace de Excel no tiene regex.
+  **No usa BBEdit** (Claude lo supuso por [[Perceptyx/plataforma|plataforma]], que lo lista como herramienta del equipo).
+  Queda en [[equipo/ignacio|su perfil]].
+
+---
+
 ## 2026-10-28 — Reporting Account Update: vista demográfica con OR sobre el mismo demo (LEB EU, cerrado)
 
 Tarea *Reporting Account Update*: sumar a la vista de un usuario de reportes un segundo grupo, `(A AND B) OR C`, con A y

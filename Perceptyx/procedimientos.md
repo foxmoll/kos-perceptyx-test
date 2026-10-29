@@ -42,6 +42,7 @@ compuertas de abajo, marcando 🔍 cada paso que no salga de una sección.
 | Alta de cliente, SSO, API, borrado de PII | sus secciones, por nombre |
 | **Bandas calculadas de edad o tenure** (crearlas o cambiar sus cortes) | § Agregar un demográfico nuevo › *Demo calculado desde una fecha* (✅ 27/10/2026). ~~Sin procedimiento escrito~~ SUPERSEDED 27/10 |
 | **User setup con varios status: empleados con la vista de su manager, umbral distinto por país, "replicar el survey anterior"** | **Sin procedimiento escrito** (§ Pendientes). Lo más cercano: § Usuarios Manager, solo para los status de manager |
+| **Corregir demos o jerarquía con el survey en vivo** (excepción aprobada por el PM / Jackie) | **Sin procedimiento escrito.** Un caso: [[Perceptyx/bitacora\|bitacora]] 2026-10-29. Ojo: *Add/Update Demographics* no corre en vivo (`UPDATE` por SOS, una sentencia por corrida), y el sync toca a todos los respondentes |
 | **Reporting Account Update: cambiar la vista demográfica de un usuario** | **Sin procedimiento escrito.** Un caso: [[Perceptyx/bitacora\|bitacora]] 2026-10-28 (*Reporting Account Update*). Piezas en § Usuarios Manager (`users.view`, User Editor). Ojo: el constructor no repite un demo en un grupo OR, y SOS no escribe en `users` |
 
 ## Compuertas antes de cualquier tarea que toque demográficos
@@ -419,6 +420,8 @@ día (en el caso ya se había hecho una de *after-close comments*).
    prefilled se saltean.
 7. Si el verify script dice que falta una opción de demo → *Operations tools* › agregar opciones de
    demo faltantes desde participant data.
+   Es *Add missing demographic options…* (solo agrega). **No** *Create demographic options…*: reconstruye la
+   lista y re-indexa (✅ 29/10/2026, [[Perceptyx/bitacora|bitacora]]).
 8. **Sync reporting demographics from participant data** para las columnas tocadas → `all_data`.
 9. Audit report al PM.
 
@@ -1779,6 +1782,10 @@ where not (a.`02_13_07` <=> b.`02_13_07`)
 ```
 
   `<=>` compara también los NULL. Si `client_id` estuviera repetido, el join cuenta de más: revisar antes de concluir.
+- ⚠️ **El sync trabaja por demo sobre todos los respondentes**, no solo sobre las filas que se corrigieron (✅ 29/10/2026):
+  en vivo con *blank out* = Yes sobre 50 demos realineó 232 respondentes ajenos al pedido, cuyo prefill había cambiado
+  por el feed. Siempre Test Mode primero, backup de `all_data` antes, y leer el test completo: si muestra gente fuera del
+  pedido, decidir con el PM antes de correr. Caso en [[Perceptyx/bitacora|bitacora]] 2026-10-29.
 
 ### Launch Audit (SOS › Launch › *Launch Audit*) — la tarea *"launch audit"*
 
