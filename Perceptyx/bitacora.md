@@ -7,6 +7,30 @@ Cuando algo de acá cambia, no se borra: se marca `SUPERSEDED (fecha)` y se enla
 
 ---
 
+## 2026-10-30 — Translations v2 en SOS (tour de BMS)
+
+Ignacio pasó el tour completo de 10 pasos de **Translations v2** (`#translations-v2`) en 10 capturas. El tour usa datos
+ficticios, así que no hay cliente. Volcado en [[Perceptyx/services-os|services-os]] § Translations, con equivalencias
+legacy → v2 en [[Perceptyx/procedimientos#Traducciones|procedimientos § Traducciones]].
+
+- ✅ Lo que más cambia en la práctica:
+  - **todo pasa por preview y nada se escribe hasta confirmar**;
+  - **la subida del Excel rechaza filas con el inglés editado o sin placeholders** (antes se creaba una frase nueva sin
+    avisar);
+  - **quitar un idioma no borra sus traducciones**;
+  - en Managed Build, **los idiomas se escriben también en el master**.
+- ✅ ***Needs attention* es la mitad mecánica del QA de traducciones.** Fuentes, RTL, layout de emails y calidad siguen a
+  mano.
+- ✅ El tour **explica el caso del 29/10** (thank you page en inglés): el texto editado después del import no tiene match
+  porque la búsqueda es por el inglés exacto. La v2 lo muestra en *Needs attention* y lo resuelve con *Import English
+  text*.
+- 🔍 **Abierto:**
+  - cuáles son "los dos pulls de Ops Tools" que reemplaza *Import English text*;
+  - si Premium/Machine son SmartCat/Microsoft;
+  - si la limitación de **Mosaic** de la guía del 08/10 vale para la v2.
+
+---
+
 ## 2026-10-30 — Comentarios automáticos, survey cerrado: verificación post-cierre (LEB EU, no healthcare)
 
 Tarea *PFS: Verify Comments Processed (Survey Closed)*, trabajada paso a paso por Ignacio con Claude. Es la segunda vez

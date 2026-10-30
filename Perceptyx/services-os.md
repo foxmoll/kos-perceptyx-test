@@ -166,7 +166,101 @@ herramienta vieja**. 🔍 Los cruces son lectura propia salvo donde la guía dic
   - 🔍 Cuando *Configure Demographics* y *Verify Data* estén, reemplazan el reordenamiento por Excel + SQL
     y los verify scripts del training.
 - **Translations** — frases en inglés, traducción con el proveedor, edición, links de revisión. ⚠️ No anda
-  para eventos **Mosaic**.
+  para eventos **Mosaic** (guía del 08/10; 🔍 no se sabe si vale para la v2).
+  - **Translations v2** (`#translations-v2`). ✅ Fuente: **tour de BMS de 10 pasos, con datos ficticios**, en capturas de
+    Ignacio del **30/10/2026**. Es cómo la herramienta se describe a sí misma: todavía no se usó en un ticket real.
+    Procedimiento legacy y equivalencias en [[Perceptyx/procedimientos#Traducciones|procedimientos § Traducciones]].
+    - **Arriba, el survey:** primero se elige el cliente en la barra y después el survey. El chip dice si es **Classic o
+      Managed Build**, y eso importa: **en Managed Build, SOS también escribe los idiomas en la lista del master**, porque
+      el survey se reconstruye desde ahí. Pestañas: **Overview · Actions · Translations · Needs attention**.
+    - **Overview — una fila por idioma.** Tiene tres columnas:
+      - ***Untranslated***: verde = todo traducido, amarillo = faltan, gris = nada empezado. Un toggle filtra survey o
+        reporting. Clic en el idioma → lo abre en Translations. Clic en la celda → solo las frases que faltan.
+      - ***Reviewer edits***: el **lock, y es el único lugar donde está**. *Locked* = **se ignoran las ediciones de los
+        revisores en el link de revisión**. **No bloquea tu edición inline.** *Open* = reabre la revisión, y los revisores
+        vuelven a usar sus mismos links. Cada clic queda auditado.
+      - ***Issues***: lo que encontró el chequeo de readiness en las traducciones hechas (lo que falta traducir ya lo
+        muestra *Untranslated*). Corre al elegir el survey y después de cada guardado; mientras corre dice *Checking…*.
+        *Partly checked* = algún chequeo no pudo correr. Lo que no es de ningún idioma (frases que ya no están en el
+        survey, por ejemplo) va en una línea del survey arriba de la tabla.
+    - **Agregar o quitar idiomas** (en Overview, no en Actions). Es un typeahead: sugiere los idiomas que el cliente usó
+      en surveys recientes, o se escribe nombre o código del **catálogo aprobado, el mismo de MAC *Select Languages***.
+      *Copy from* copia todos los idiomas de otro survey del cliente (los del trend group, si lo tiene). Una fila
+      resaltada está en borrador. **Quitar un idioma pide confirmar y dice cuántas traducciones tiene: no se borran, y
+      vuelven si se lo agrega de nuevo.** El setup file del survey se reconstruye solo.
+    - **Actions** — todas las pantallas tienen la misma forma: qué incluir → preview → un solo confirm. Tiles: *Add one
+      English phrase*, *Upload English phrases*, *Import English text*, *Send for translation*, *Customer translation
+      review* y el Excel (bajar y subir plantilla).
+      - ***Import English text*** — **reemplaza "los dos pulls de Ops Tools"** (🔍 probablemente *Translations for Data
+        Collector* y el de emails; el tour no los nombra). Trae tres buckets, todos tildados de entrada: **Survey
+        Content**, **Survey Emails** (los templates del launch; los que no tienen tag quedan sin tildar y con el motivo) y
+        **Reporting Text**. *Translate Demographics* arranca en **No**: los nombres y opciones de demográficos entran
+        solo eligiendo *Name only* o *Name and options*, y las opciones **solo si el cliente las contrató**. **No se
+        eligen idiomas:** lo que se importa entra para todos los idiomas del survey. Se puede copiar de otros surveys
+        del cliente (por nombre y app id). **La core library se usa siempre.** El texto reusado va a su propio bucket
+        ***Previously Translated***, para que el revisor vea solo lo nuevo.
+        - El preview cuenta, por parte: encontradas, nuevas, **inglés cambiado** y **ya no están en el survey**. Si el
+          inglés de una frase cambió, se la empareja con la vieja y **las traducciones que arrastra quedan *needs
+          re-check***. Las que ya no están **se conservan con la marca *not in survey*** (siguen yendo a traducción y
+          siguen viéndolas los revisores). En la captura, la core library llenaba solo los lugares vacíos, y la traducción
+          de un survey anterior reemplazaba la de la core library si nadie la había tocado. Nada más se pisa.
+        - **No escribe nada hasta *Import*.** Con muchos Manager Toolkits puede tardar varios minutos: muestra en qué
+          parte va y se puede salir y volver. El preview dura 10 minutos.
+      - ***Send for translation*** — **arranca sin nada tildado, a propósito: cuesta plata y pone texto del survey frente
+        a un proveedor externo.** Se tildan idiomas y buckets. Cada idioma muestra lo que falta traducir, o lo que ya
+        está afuera con el proveedor y para cuándo; un idioma que ya está afuera se puede tildar igual para reenviarlo.
+        **No hay proveedor por defecto**:
+        - ***Premium Translation*** (humana): turnaround de 1, 3 o 5 días.
+        - ***Machine Translation***: vuelve en el mismo minuto.
+        
+        El preview calcula en el servidor frases, palabras y **costo estimado por idioma** (en la captura del tour:
+        $10–13 cada 100 palabras según el idioma, con un deadline en hora Pacífico). *Confirm and send* registra quién y
+        cuándo. ***Sent batches*** muestra cada idioma como *sent / received / overdue / failed*. Premium vuelve por
+        callback, y **cada vez que se abre la página SOS busca lo que sigue afuera**: así se detecta un callback perdido.
+      - **Plantilla de Excel para el cliente** — la otra forma de conseguir traducciones. Se tildan idiomas y buckets igual
+        que en Send. **Una pestaña por idioma**, con la frase, el bucket, el inglés y la traducción que ya exista. **Todo
+        está bloqueado menos la columna de traducción.** **Bajarla no registra nada.**
+      - **Subir la plantilla completa** — **valida todas las filas antes de escribir.** Solo lee las pestañas de los
+        idiomas del survey (las demás figuran como salteadas) y avisa qué idiomas del survey no trajo. **Rechaza, con el
+        número de fila del Excel:**
+        - la fila con el **inglés editado** (la herramienta vieja creaba una frase nueva sin avisar);
+        - la traducción que **perdió un placeholder** (`[[first_name]]`) o el formato del inglés.
+        
+        Lo rechazado no se toca. El resto se muestra como *to add / to change*, y **nada se escribe hasta *Apply***.
+    - **Translations — cada frase, de a un idioma.** Agrupa por sección (*Survey content*, *Reporting text*) y bucket.
+      Los dots de status siguen la regla de la herramienta legacy: *Untranslated / Submitted / Translated / Modified*.
+      **Dot rojo hueco = *Needs repair***: el slot de la frase tiene el texto del propio survey y una herramienta legacy
+      escribió encima, así que **SOS no lo toca hasta que se repare** (el chip aparece solo si el idioma tiene alguno).
+      Chips de filtro combinables: *Needs re-check*, *Has an issue*, etc. Columna ***Source***: *Premium Translation*,
+      *Reviewer*, *Workbook*… Clic en la traducción → edición inline; el lápiz, en una celda vacía. **Funciona aunque el
+      idioma esté locked.** Clic en el inglés → editarlo (las traducciones quedan). Menú de la fila, solo si aplica:
+      *Show original · Clear re-check · Dismiss issue · Re-open issue*.
+    - ***Has an issue*** — las frases que reportaría el chequeo de readiness, cada una con su etiqueta (ej. *Lost a merge
+      field: `[[first_name]]`*; al pasar el mouse se ve la oración entera). Arreglarla y guardar borra la etiqueta y
+      vuelve a correr el chequeo. Si está bien así, *Dismiss issue* (queda *Dismissed*, gris, y sale de los conteos).
+    - ***Needs attention*** — **el chequeo de readiness como lista: es la mitad mecánica del QA de traducciones.** Busca:
+      - frases sin traducir en un bucket que un lector ve, o un idioma sin nada traducido;
+      - merge field o formato perdido o ganado;
+      - link al idioma equivocado o a otra dirección que el inglés, o link en inglés que apunta a otro survey;
+      - traducción que todavía dice *needs translating* o *TBD*, o marcada hecha pero vacía;
+      - texto de popup o de definición sin traducir;
+      - **idioma locked acá pero abierto a revisores** (lo normal es que pase después de un rebuild de Managed Build, o
+        al desbloquear fuera de SOS);
+      - envío al proveedor que falló y no se reenvió;
+      - **texto del survey o del reporting editado después del import, que sale en inglés en todos los idiomas** (no
+        tiene match, porque la búsqueda es por el inglés exacto) → *Import English text* de nuevo. Es el mecanismo del
+        caso de la thank you page del 29/10 ([[Perceptyx/bitacora|bitacora]]).
+      
+      Cada ítem nombra los idiomas y todas las salidas: un chip de idioma, o un botón directo a la acción (*Send for
+      translation*, *Download the Excel template*, *Import from a prior survey*, *Type them in Translations*, *Remove the
+      language*). *Edit them in Translations* abre el idioma con *Has an issue* puesto. *Dismiss all* (pregunta una vez)
+      descarta todos los de ese tipo. **Nada de esto bloquea.** ***Waiting on others*** (abajo) es lo que tiene el
+      proveedor: nunca va en rojo, y pasa a *Overdue* cuando vence. El conteo de la pestaña cuenta ítems, no frases, y
+      va en rojo solo si alguno es un defecto que vería un lector. El chequeo de texto del survey y del reporting corre
+      en segundo plano (un punto en el conteo) y el resultado dura un día; *Run again* lo repite. Si una lectura falla,
+      lo dice una línea y el conteo queda con borde punteado.
+    - ⚠️ **Lo que el chequeo NO revisa** (sigue siendo QA a mano): **fuentes, wrapping, alineación RTL, layout de los
+      emails y calidad de la traducción.**
 - **Branching** (solo lectura) — las reglas de branching de **todas las fuentes** lado a lado, marcando
   *drift*. Responde *"¿se publicó?"* y *"¿en qué motor está?"*. Cada tarjeta tiene borde de color y una
   etiqueta de estado (pasar el mouse da el motivo): verde *match / sole source* = coinciden o hay una sola

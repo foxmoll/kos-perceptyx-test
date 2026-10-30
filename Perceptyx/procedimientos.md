@@ -1937,6 +1937,20 @@ la actual** (formato, colores, banner). Jackie arma primero el *invite* y saca l
 
 ### Traducciones
 
+> **Desde el 30/10/2026 también está *Translations v2* en SOS** (✅ tour de BMS, capturas de Ignacio): hace lo mismo
+> con preview y validación antes de escribir. Descripción completa en
+> [[Perceptyx/services-os|services-os]] § Translations. **Las dos formas valen igual** (Reglas § 9) hasta que se use la
+> v2 en un ticket real. Equivalencias (🔍 deducidas comparando las pantallas, no confirmadas):
+>
+> | Legacy (abajo) | Translations v2 |
+> |---|---|
+> | Ops tool *Translations for DC* (paso 1) | *Actions › Import English text* (*"reemplaza los dos pulls de Ops Tools"*) |
+> | Bucket "ya traducido" | Bucket *Previously Translated*; además, frases con inglés cambiado → *needs re-check* |
+> | *Submit … to the external provider* | *Send for translation*: Premium (humano, 1/3/5 días) o Machine (inmediata); 🔍 ¿= SmartCat / Microsoft? |
+> | *Upload completed translations* / archivo para el cliente | Plantilla de Excel: rechaza filas con el inglés editado o con placeholders perdidos |
+> | *Download Review URLs* | *Customer translation review* + lock *Reviewer edits* en Overview |
+> | `QA: Review Survey Translations` | *Needs attention* cubre la parte mecánica; fuentes, RTL, layout y calidad siguen a mano |
+
 **Regla: el survey y los emails tienen que estar terminados y confirmados *en inglés* antes de mandar a
 traducir.** Normalmente **lo envía el PM**; DelOps lo ve por troubleshooting o QA (la plantilla tiene
 `QA: Review Survey Translations`).
