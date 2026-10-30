@@ -517,6 +517,11 @@ campos **Filter** y **Bucket** (la casilla *Show Active Toggles Only* oculta lo 
 `Themes matching` → *"usage of machine learning level"* (valor *Level 0: … lexical keyword matching* = léxico) y
 *"supervised: machine learning models"* (activo = supervisado). 📣 Antes el procedimiento decía *Survey Setup ›
 Survey Configurations*: esa pantalla no muestra estos toggles. 🔍 Pendiente confirmar la ruta con Jackie.
+✅ **30/10/2026 (capturas, survey EU):** la pantalla es `rm=configure` (`https://ondemand[.eu].perceptyx.com/<app_id>/index.cgi?rm=configure`).
+En la misma pantalla, Filter `deactivate` → ***Deactivate Survey?*** (bucket *Data Collector, Key Features, LEB*): sirve
+para la compuerta de survey cerrado sin ir a *Survey Configurations*. Filter `lexic` muestra además ***Only show themes
+of selected models*** (activo, valor *Custom Themes (Lexical model)*): qué modelos muestra el reporte de comentarios.
+Aviso de la pantalla: *"Disabled toggles can be configured in event builder"* (en LEB, los toggles apagados se cambian desde LEB).
 
 **Workaround manual** (surveys con modelo léxico):
 
@@ -528,6 +533,48 @@ Survey Configurations*: esa pantalla no muestra estos toggles. 🔍 Pendiente co
 4. En **EU** es igual, en el entorno EU (la VPN de US sirve para los dos — 📣 Ignacio).
 5. Variante de Edwin: el mismo script desde **SOS** (IT / Python / Perl scripts).
 6. ✅ **Observado 20/10/2026:** el paso 2 del script **escribe** en `comments theme matches` (hacer visibles los temas). Si el paso 3 responde `mismatches in comment qid counts` con la automatización de Snowflake en curso, la salida pide esperar o volver a correr. **Volver a correr solo el paso 3, no el 2:** repetir el paso 2 vuelve a escribir sobre lo ya escrito.
+   ✅ **30/10/2026, otro estado de la automatización:** *"Current automation status: extra client IDs in Snowflake"*, con
+   el mismo pedido (*"allow Snowflake automation to complete or re-run the process"*). Después el paso 3 sigue con los
+   conteos (*Supervised / Lexically / Orphaned / Improperly modeled themed comments*); si dan bien, *"There are no
+   issues with comments_themes_matches or lexical themes"*, y pasa a *comments processing*.
+   ⚠️ **30/10/2026, falla en SOS en *comments processing*:** después de *"Comment QIDs:"* el script corta con
+   `FATAL … Cannot create directory /usr/home//script_output/: No such file or directory at …/comments_verify_steps.pl
+   line 312`. La doble barra indica que el usuario o el `$HOME` llega vacío al correr desde SOS: el script quiere
+   escribir un archivo de salida en el home de quien lo corre y en el runner de SOS no hay home. Es **del entorno, no de los
+   datos**: corta en el `mkdir`, antes de escribir, y lo que va hasta ahí (duplicados, visibilidad, conteos de
+   `comments_themes_matches`) ya corrió. Recordar que los scripts de SOS figuran como *NOT TESTED*
+   ([[Perceptyx/services-os|services-os]]). 🔍 Cómo se completa la verificación de *comments processing*: pendiente de
+   quien mantiene SOS o de Jackie. ✅ Se repite igual al volver a correr solo el paso 3 (mismo día, 3 minutos después): no es
+   intermitente. ✅ **Pasa también con otro app** (30/10, 14:08): no es del survey. 🔍 Puede ser de SOS en general o del usuario de
+   Ignacio, que tampoco tiene armado el entorno en `pms.eu`. Elena lo corrió desde su home en `pms`, no desde SOS, así que
+   eso no lo resuelve. Ignacio lo reportó por **IT Help**, junto con el alta del entorno (30/10). Mientras no se arregle, la parte
+   *Comment QIDs* la tiene que correr alguien con el entorno de `pms` armado.
+   📣 **Elena Khaletskaya, 30/10/2026 (Slack), sobre *"extra client IDs in Snowflake"*:** *"If we have matching number of
+   comments I think we are good"*. El criterio es que coincidan los conteos de comentarios, no que el aviso desaparezca.
+   🔍 Falta saber qué conteos tienen que coincidir: lo más probable es la comparación de *Comment QIDs* (app ↔ Snowflake),
+   que es justo la parte que corta en SOS.
+   ✅ **Cómo se completó (30/10/2026):** en el host de scripts (`pms.eu.perceptyx.com`) tampoco le anduvo a Ignacio, que todavía no tiene el entorno armado: *Can't locate DBI.pm*, `proot` inexistente ([[Perceptyx/plataforma|plataforma]], fila *Jail*). Lo corrió **Elena desde
+   su entorno**, con home propio, y ahí *Comment QIDs* lista cada pregunta abierta con *"All comments processed for QID
+   …"*, deja el detalle de lo no procesado en `/usr/home/<usuario>/script_output/<app_id>_unprocessed_comments.txt` y
+   termina con *"If all comments have processed, you are good to proceed."* Con todas las QID procesadas, el aviso
+   *extra client IDs in Snowflake* **no bloquea**: es el criterio de Elena. Mientras SOS no se arregle, la vía es
+   pedirle a alguien con jail que funcione que corra la parte post-cierre del paso 3.
+7. ✅ **Backup de `comments_themes_matches` (30/10/2026, app LEB EU, tarea *PFS: Verify Comments Processed (Survey Closed)*):**
+   la tabla **no aparece** en el desplegable de *Operations Tools › Utilities › Backup table* (🔍 no se sabe por qué; las
+   tablas `comment_*` y `comments_processed*` sí). Se respaldó por **SOS › Database Tools** con `CREATE TABLE
+   comments_themes_matches_AAAAMMDD_<iniciales> LIKE comments_themes_matches;` y después `INSERT INTO … SELECT * FROM
+   comments_themes_matches;` (regla 1, tercera vía; Database Tools aceptó el `INSERT … SELECT` aunque nombra dos tablas) y se verificó el conteo en Querious
+   (entrada = salida). El nombre real de la tabla es `comments_themes_matches` (✅ `SHOW TABLES`).
+8. ✅ **`model_id = 10` con el supervisado apagado (30/10/2026):** en ese survey (léxico, *supervised* apagado),
+   `comments_themes_matches` tenía 67.007 filas con `model_id = 10` y 31.318 con `NULL`. El paso 3 del script las cuenta
+   como *Supervised themed comments: 66994* y *Lexically themed comments: 31312*: **`10` = supervisado se confirma**, y
+   hay temas supervisados aunque el toggle esté apagado (🔍 los generaría Snowflake igual; el toggle *Only show themes of
+   selected models = Custom Themes (Lexical model)* decidiría cuáles se muestran). Si hubiera que repoblar, la
+   reinserción de `model_id = 10` sí tiene filas que restaurar.
+9. 🔍 **Backups automáticos el día del cierre:** el mismo 30/10, antes de abrirse la tarea, ya existían
+   `comments_themes_matches_partial_removal_<fecha>_0416…` y `…_terms_removal_<fecha>_0422…` (y lo mismo para
+   `comment_sentiments*` y `comments_processed*`). Igual que el 20/10. Patrón: algo corre al cierre y deja esos backups
+   (🔍 probablemente la automatización de Snowflake); los `…_clr_data_…` son de los clearouts previos al lanzamiento.
 
 **Estado al 01/10/2026** (✅ decisión registrada en el huddle, por Jackie Cech): engineering dice que
 está arreglado, pero **el script manual se sigue corriendo** hasta que los chequeos automáticos entren

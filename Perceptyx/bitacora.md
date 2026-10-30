@@ -7,6 +7,26 @@ Cuando algo de acá cambia, no se borra: se marca `SUPERSEDED (fecha)` y se enla
 
 ---
 
+## 2026-10-30 — Comentarios automáticos, survey cerrado: verificación post-cierre (LEB EU, no healthcare)
+
+Tarea *PFS: Verify Comments Processed (Survey Closed)*, trabajada paso a paso por Ignacio con Claude. Es la segunda vez
+que aparece este tipo de tarea (la primera fue el 20/10, más abajo). Cliente y app omitidos. Procedimiento actualizado en
+[[Perceptyx/procedimientos#Comentarios con modelo léxico (workaround de bug)|procedimientos § Comentarios con modelo léxico]].
+
+- ✅ **Configuración:** está en `rm=configure`, que también muestra *Deactivate Survey?*. Snowflake activo, Level 0
+  (léxico), supervisado apagado.
+- ✅ **Backup:** `comments_themes_matches` no aparece en *Operations Tools › Backup table*. Se respaldó por SOS ›
+  Database Tools (`CREATE … LIKE` + `INSERT … SELECT`) y el conteo dio igual.
+- ✅ **`model_id = 10` = supervisado, confirmado:** el script cuenta como *supervised* las filas con 10, aunque el toggle
+  esté apagado.
+- ⚠️ **En SOS, el script corta en *Comment QIDs*** (`/usr/home//script_output/`, sin home). Se repitió dos veces, y en el
+  host de scripts de Ignacio (`pms.eu`) tampoco anduvo, porque su entorno no está armado: *Can't locate DBI.pm*, sin `proot`. Lo corrió Elena: todas las QID procesadas.
+- 📣 **Elena, sobre *extra client IDs in Snowflake*:** si los conteos de comentarios coinciden, está bien. No hace falta
+  esperar a que el aviso desaparezca.
+- **Resultado:** sin problemas de datos. No hizo falta el workaround en SQL.
+
+---
+
 ## 2026-10-29/30 — Usuarios manager con status propios, SSO = emp_id e informe de integridad (tarea 827284, LEB EU, cerrado)
 
 Tarea *PFS: Creates Custom Hierarchy Based Users*, trabajada paso a paso por Ignacio con Claude. ~24.000 personas,

@@ -76,6 +76,7 @@ Para encabezar cada respuesta sobre un ticket con las herramientas y sus links (
 | › User Editor (*View/Edit Users*) | `rm=users_editor` | ✅ 08/10 |
 | › Manager Hierarchy Tree (*Settings › Add Users*) | `rm=managers_tree` | ✅ 08/10 |
 | › Operations Tools | `rm=operations_tools` | ✅ 08/10 |
+| › Report Editor › Configuration (toggles: Snowflake, modelo de temas, *Deactivate Survey?*) | `rm=configure` | ✅ capturas 30/10 |
 | › Translation Tool · Emails | `rm=translation_tool` · `rm=survey_launch` | ✅ 21/09 |
 | **SOS** | `https://services-os.ssvcs.pyx-int.com/` — Perl Scripts: `#perl` | ✅ captura 08/10 |
 | **Querious** | App de escritorio; conexión US de lectura a `classic-mysql-us.production.us.pyx-int.com`, base = `<app_id>`. Credenciales: fuera del vault | ✅ capturas 08/10 |
@@ -168,7 +169,17 @@ Cada survey tiene su base (**MySQL 8.0** ✅ Confluence). Cómo se conectan y po
 | **Trend Mismatch Report** | Excel con las opciones de demo que no coinciden entre el app actual y el de trend; insumo de `trend_custom_linkages` |
 | **`trend_custom_linkages`** | `cond1` (app actual) · `trend_app_id` · `cond2` (app anterior). El par `cond1`+`trend_app_id` no se repite |
 | **Trend Report Systems** (MAC) | Con qué apps trendea un app (hasta 5; más, por `mac.trend_apps`) |
-| **Jail** | ✅ **Entorno de desarrollo propio** de cada uno (`<usuario>.perceptyx.com`): copia de bases con `dbcopy <appid>`, clon del repo `cronjobs`, MailHog para ver los mails. Ahí se prueban queries y scripts antes de producción (Confluence *Automation Setup – 360*, 06/10). ⚠️ **Se está dejando de usar** a favor de SOS (📣 Ignacio, 06/10); Ignacio no tiene jail. 📣 Jackie, 21/09: hay jail **de producción** y **local de test**; los locales **ya no se crean y se dan de baja**. Para practicar: los surveys del master app ***LEB enablement*** |
+| **Jail** | ✅ **Entorno de desarrollo propio** de cada uno (`<usuario>.perceptyx.com`): copia de bases con `dbcopy <appid>`, clon del repo `cronjobs`, MailHog para ver los mails. Ahí se prueban queries y scripts antes de producción (Confluence *Automation Setup – 360*, 06/10). ⚠️ **Se está dejando de usar** a favor de SOS (📣 Ignacio, 06/10); ~~Ignacio no tiene jail.~~ SUPERSEDED (30/10/2026): ✅ Ignacio tiene usuario en el **host de scripts de PM**,
+`pms.eu.perceptyx.com` (US: `pms.perceptyx.com`, SG: `pms.sg.perceptyx.com`). Se entra por `ssh <usuario>@pms.eu.perceptyx.com`
+o con Transmit (SFTP). Es FreeBSD, con roles *appserver, redis, devjail*. Cada usuario tiene `/usr/home/<usuario>/` con
+`script_input/` y `script_output/`, y los scripts están en `/usr/local/www/perceptyx/perl/scripts/`. El banner explica que
+los scripts conectan a la MySQL de producción con **credenciales propias de cada usuario**, en las variables
+`MYSQL_HOST`, `MYSQL_USER` y `MYSQL_PASS`, que se cargan desde `~/.profile`; los usuarios salen de un pillar de Salt.
+**El 30/10 a Ignacio no le anduvo:** `proot` dio *command not found*, `perl comments_verify_steps.pl` dio *Can't locate
+DBI.pm* y `mysql` intentó un socket local. 🔍 Todo apunta a que su `~/.profile` no tiene el entorno armado: falta
+`proot` (que en otros usuarios probablemente prepara Perl) y faltan las credenciales. Lo arregla quien da de alta los
+usuarios. ⚠️ En ese host **no se usa `sudo`**: es compartido, y `sudo rm -rf /tmp/pyx` o `service mysql-server start`
+son comandos de un jail local, no de este host ([[Perceptyx/procedimientos#Comentarios con modelo léxico (workaround de bug)|procedimientos § Comentarios con modelo léxico]]). 📣 Jackie, 21/09: hay jail **de producción** y **local de test**; los locales **ya no se crean y se dan de baja**. Para practicar: los surveys del master app ***LEB enablement*** |
 | **360v2** | Tipo de app de *Cultivate – 360 Feedback*. Leader (ratee) + raters; demos propios Survey Version, Relationship, ratee_id, Participant Fullname. Ver [[Perceptyx/cultivate-360|cultivate-360]] |
 | **CRON logic form** | El formulario que define una automatización (SFTP, archivo, campos, bandas, transformaciones) |
 | **`prefill_data_all`** | Lista completa de empleados que carga el cron (fuente de verdad del master app) |
