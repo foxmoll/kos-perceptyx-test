@@ -26,7 +26,7 @@ legacy → v2 en [[Perceptyx/procedimientos#Traducciones|procedimientos § Tradu
   text*.
 - 🔍 **Abierto:**
   - cuáles son "los dos pulls de Ops Tools" que reemplaza *Import English text*;
-  - si Premium/Machine son SmartCat/Microsoft;
+  - ~~si Premium/Machine son SmartCat/Microsoft~~ **resuelto 30/10:** [[Perceptyx/catalogo-servicios|catalogo-servicios]] ya decía que *human translations* pasa a llamarse *premium translations* (humano = SmartCat, máquina = Microsoft). 🔍 Que la v2 use esos mismos proveedores es lo esperable, pero la pantalla no los nombra;
   - si la limitación de **Mosaic** de la guía del 08/10 vale para la v2.
 
 ---

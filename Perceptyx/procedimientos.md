@@ -1946,7 +1946,7 @@ la actual** (formato, colores, banner). Jackie arma primero el *invite* y saca l
 > |---|---|
 > | Ops tool *Translations for DC* (paso 1) | *Actions › Import English text* (*"reemplaza los dos pulls de Ops Tools"*) |
 > | Bucket "ya traducido" | Bucket *Previously Translated*; además, frases con inglés cambiado → *needs re-check* |
-> | *Submit … to the external provider* | *Send for translation*: Premium (humano, 1/3/5 días) o Machine (inmediata); 🔍 ¿= SmartCat / Microsoft? |
+> | *Submit … to the external provider* | *Send for translation*: Premium (humano, 1/3/5 días) o Machine (inmediata). *Premium* = el nombre nuevo de *human* = SmartCat ([[Perceptyx/catalogo-servicios\|catalogo-servicios]]); 🔍 la pantalla no nombra al proveedor |
 > | *Upload completed translations* / archivo para el cliente | Plantilla de Excel: rechaza filas con el inglés editado o con placeholders perdidos |
 > | *Download Review URLs* | *Customer translation review* + lock *Reviewer edits* en Overview |
 > | `QA: Review Survey Translations` | *Needs attention* cubre la parte mecánica; fuentes, RTL, layout y calidad siguen a mano |
