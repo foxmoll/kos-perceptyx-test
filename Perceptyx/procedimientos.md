@@ -39,6 +39,7 @@ compuertas de abajo, marcando 🔍 cada paso que no salga de una sección.
 | Trends que no cruzan | § Trend mismatch |
 | Usuarios Manager / Manager Below Threshold | § Usuarios Manager |
 | Emails, traducciones, chequeo de integridad, Launch Audit | § Emails, traducciones y chequeos del app |
+| **Verificar comentarios** (*PFS: Verify Comments Processed*, antes del lanzamiento o con el survey cerrado) | § Comentarios con modelo léxico (script `comments_verify_steps`, backup previo, falla de SOS en *Comment QIDs*) |
 | Alta de cliente, SSO, API, borrado de PII | sus secciones, por nombre |
 | **Bandas calculadas de edad o tenure** (crearlas o cambiar sus cortes) | § Agregar un demográfico nuevo › *Demo calculado desde una fecha* (✅ 27/10/2026). ~~Sin procedimiento escrito~~ SUPERSEDED 27/10 |
 | **User setup con varios status: empleados con la vista de su manager, umbral distinto por país, "replicar el survey anterior"** | **Sin procedimiento escrito** (§ Pendientes). Lo más cercano: § Usuarios Manager, solo para los status de manager |
@@ -547,7 +548,9 @@ Aviso de la pantalla: *"Disabled toggles can be configured in event builder"* (e
    quien mantiene SOS o de Jackie. ✅ Se repite igual al volver a correr solo el paso 3 (mismo día, 3 minutos después): no es
    intermitente. ✅ **Pasa también con otro app** (30/10, 14:08): no es del survey. 🔍 Puede ser de SOS en general o del usuario de
    Ignacio, que tampoco tiene armado el entorno en `pms.eu`. Elena lo corrió desde su home en `pms`, no desde SOS, así que
-   eso no lo resuelve. Ignacio lo reportó por **IT Help**, junto con el alta del entorno (30/10). Mientras no se arregle, la parte
+   eso no lo resuelve. Ignacio lo reportó por **IT Help**, junto con el alta del entorno (30/10).
+   📣 IT (Caroline Amaro, 30/10): *"SOS isn't passing your username to the script"*: **es del lado de SOS**, y lo pasó a
+   la persona de SOS. Mientras no se arregle, la parte
    *Comment QIDs* la tiene que correr alguien con el entorno de `pms` armado.
    📣 **Elena Khaletskaya, 30/10/2026 (Slack), sobre *"extra client IDs in Snowflake"*:** *"If we have matching number of
    comments I think we are good"*. El criterio es que coincidan los conteos de comentarios, no que el aviso desaparezca.

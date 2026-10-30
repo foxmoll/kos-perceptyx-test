@@ -24,6 +24,12 @@ que aparece este tipo de tarea (la primera fue el 20/10, más abajo). Cliente y 
 - 📣 **Elena, sobre *extra client IDs in Snowflake*:** si los conteos de comentarios coinciden, está bien. No hace falta
   esperar a que el aviso desaparezca.
 - **Resultado:** sin problemas de datos. No hizo falta el workaround en SQL.
+- 📣 **IT Help (Caroline Amaro), mismo día:** son dos problemas. (1) La falla de SOS es de SOS: no le pasa el usuario al
+  script. Lo derivó a la persona de SOS. (2) En `pms.eu`, *DBI.pm* = sesión con el Perl del sistema. ✅ Con `perlbrew
+  switch perl-5.28.1` y volviendo a entrar, Perl anda. Siguen faltando las credenciales de MySQL en `~/.profile`
+  (*Access denied … using password: NO*). Ignacio las pidió con escritura; las da #team-infraplat.
+- 📣 **Accesos de Ignacio:** los cuatro hosts MySQL (US/EU, solo lectura y lectura/escritura), con la escritura
+  restringida. Detalle en [[Perceptyx/plataforma|plataforma]] (filas *Querious* y *Jail*).
 
 ---
 

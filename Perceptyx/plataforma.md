@@ -79,7 +79,7 @@ Para encabezar cada respuesta sobre un ticket con las herramientas y sus links (
 | › Report Editor › Configuration (toggles: Snowflake, modelo de temas, *Deactivate Survey?*) | `rm=configure` | ✅ capturas 30/10 |
 | › Translation Tool · Emails | `rm=translation_tool` · `rm=survey_launch` | ✅ 21/09 |
 | **SOS** | `https://services-os.ssvcs.pyx-int.com/` — Perl Scripts: `#perl` | ✅ captura 08/10 |
-| **Querious** | App de escritorio; conexión US de lectura a `classic-mysql-us.production.us.pyx-int.com`, base = `<app_id>`. Credenciales: fuera del vault | ✅ capturas 08/10 |
+| **Querious** | App de escritorio, base = `<app_id>`. Credenciales: fuera del vault. **Hosts** (📣 Ignacio, 30/10), por túnel SSH al host `pms` de su región: US solo lectura `classic-mysql-us-ro.production.us.pyx-int.com` · US lectura/escritura `classic-mysql-us.production.us.pyx-int.com` (SSH `pms.perceptyx.com`) · EU solo lectura `classic-mysql-eu-ro.production.eu.pyx-int.com` · EU lectura/escritura `classic-mysql-eu.production.eu.pyx-int.com` (SSH `pms.eu.perceptyx.com`). En los dos de lectura/escritura, el login de Ignacio tiene **restringidos los comandos de escritura** | ✅ capturas 08/10 · 📣 30/10 |
 | **Excel** | Local. Helper formulas en Descargas (§ arriba) | 📣 Ignacio |
 
 ---
@@ -178,7 +178,13 @@ los scripts conectan a la MySQL de producción con **credenciales propias de cad
 **El 30/10 a Ignacio no le anduvo:** `proot` dio *command not found*, `perl comments_verify_steps.pl` dio *Can't locate
 DBI.pm* y `mysql` intentó un socket local. 🔍 Todo apunta a que su `~/.profile` no tiene el entorno armado: falta
 `proot` (que en otros usuarios probablemente prepara Perl) y faltan las credenciales. Lo arregla quien da de alta los
-usuarios. ⚠️ En ese host **no se usa `sudo`**: es compartido, y `sudo rm -rf /tmp/pyx` o `service mysql-server start`
+usuarios. 📣 **IT Help (Caroline Amaro, 30/10):** el *DBI.pm* aparece cuando la sesión usa el **Perl del sistema**. La
+solución es `perlbrew switch perl-5.28.1`, salir y volver a entrar. Si después falta algo, la cuenta en el host la
+termina de armar **#team-infraplat**. ✅ **Probado el 30/10:** después de `perlbrew switch perl-5.28.1` y de volver a
+entrar, `perl -v` da 5.28.1 y `perl -MDBI` anda. `MYSQL_HOST` y `MYSQL_USER` siguen vacías, y el script corta con
+`DBI connect('<app>:classic-mysql-eu.production.eu.pyx-int.com','',...) failed: Access denied for user 'imoll'@'10.80.101.15'
+(using password: NO)`. **El Perl ya está; faltan las credenciales en `~/.profile`.** Eso lo da de alta #team-infraplat
+(pillar `pillar/common/users/pms/eu/init.sls`). ⚠️ En ese host **no se usa `sudo`**: es compartido, y `sudo rm -rf /tmp/pyx` o `service mysql-server start`
 son comandos de un jail local, no de este host ([[Perceptyx/procedimientos#Comentarios con modelo léxico (workaround de bug)|procedimientos § Comentarios con modelo léxico]]). 📣 Jackie, 21/09: hay jail **de producción** y **local de test**; los locales **ya no se crean y se dan de baja**. Para practicar: los surveys del master app ***LEB enablement*** |
 | **360v2** | Tipo de app de *Cultivate – 360 Feedback*. Leader (ratee) + raters; demos propios Survey Version, Relationship, ratee_id, Participant Fullname. Ver [[Perceptyx/cultivate-360|cultivate-360]] |
 | **CRON logic form** | El formulario que define una automatización (SFTP, archivo, campos, bandas, transformaciones) |
