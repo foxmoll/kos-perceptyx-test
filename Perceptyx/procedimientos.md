@@ -2348,6 +2348,82 @@ columna *Responses*, **no** *Completions*. No se reinterpreta el pedido.
   ```
   Si el pedido dice inactivos y salen activos: `update users set inactive = 1 where status in (…)`. 🔍 el
   valor exacto de la columna `inactive` (1 / 0) no se vio.
+- ✅ **Medido el 29/10/2026** (tarea 827284, § Cómo se resolvió el 29–30/10, abajo): las dos pasadas de *Add
+  Users* dejaron las 3.720 cuentas con **`inactive = 1`**. Le da la razón al DM del 09/10, **para ese app y esa
+  versión**. 🔍 Lo del 09/10 de Ignacio queda sin explicar (¿otro app, otra versión?). La query de arriba se sigue
+  corriendo en cada tarea: es barata y el pedido manda.
+
+### Cómo se resolvió el 29–30/10 (tarea 827284 — status con nombre propio, SSO = emp_id, sin `get-mgr-counts`)
+
+> Fuente: tarea real trabajada paso a paso por Ignacio con Claude, 29–30/10/2026 (survey LEB EU cerrado, ~24.000
+> personas, árbol de 3.720 managers y 11 niveles). Marca por defecto ✅ (visto en pantalla o en la base). Cliente y
+> personas omitidos. Registro en [[Perceptyx/bitacora|bitacora]].
+
+Pedido: dos status con **nombre propio del cliente** (*Leader* = `mgr`, *Leader below threshold* = `mgr_below_min_n`, no
+`mgrbt`), umbral 5 **por responses**, *below* con acceso al nivel de arriba, **duplicados conservados** (quien ya tenía
+cuenta HR/exec suma la de manager), **SSO ID = emp_id**, e integridad: **informar** (no borrar) a quien ve menos de 10
+preguntas.
+
+Lo nuevo respecto de las versiones de arriba:
+
+1. ***Settings* tiene dos herramientas en la misma pantalla.** *CEO emp_id* + *Choose File* + **Upload Managers**
+   reconstruye el árbol (§ Late adds, paso 8). El botón **Add Users**, debajo, es aparte y **no pide CEO ni archivo**.
+   El diseño invita a confundirlas (le pasó a Ignacio). La pantalla existe en EU: `ondemand.eu.perceptyx.com/<app>/index.cgi?rm=managers_tree`.
+2. **El aviso *Conflict detected* de *Add Users* cuenta por `emp_id_view`**: *"N manager accounts appear to already
+   exist, based on the emp_id_view. Skip or Create?"*. Cuenta **cualquier** cuenta cuya vista sea un manager de la
+   población, sea de quien sea: en el caso, un `exec` de la misma persona y un `admin2` de otra con su vista. **Skip
+   dejaría a esos managers sin su cuenta de manager** → con "retain duplicates", **Create**. Antes de elegir:
+   `select username, status, emp_id, emp_id_view from users where emp_id_view is not null and emp_id_view <> '';`.
+   🔍 El aviso dijo 4 y la query encontró 2 en la población: no se sabe qué más cuenta.
+3. **Las claves van a `temp_passwords`** (creció exactamente lo mismo que `users` en cada pasada; `password_history`
+   quedó en 0). Esa es la tabla a respaldar junto con `users`.
+4. **Ambas pasadas dejaron todo inactivo** (§ Activos o inactivos, arriba).
+5. ⚠️ **`get-mgr-counts` devolvió 115 managers de 3.720** (8 KB contra ~900 KB en otros apps), igual en dos
+   corridas. Con ese archivo como "esperado", la pasada 1 parecía mal (2.319 contra 94) y no lo estaba. **Control
+   independiente del archivo:** `select count(distinct mgr_id) from managers_tree where mgr_id <> '0';` →
+   Leader + Below tiene que dar eso (2.319 + 1.401 = 3.720 exacto). Y el umbral se verifica **por muestreo en el
+   borde**, contando respondents en SQL:
+   ```sql
+   select count(distinct e.emp_id) from managers_tree t join emerge e on e.emp_id = t.emp_id
+   where concat('.', t.tree_path, '.') like concat('%.', '<ID>', '.%')
+     and t.emp_id <> '<ID>' and e.first_response_date is not null;
+   ```
+   En el caso: 4 → sin cuenta, 5 → *Leader*. Coincidió con el archivo en managers chicos; en uno grande dio 1.536
+   contra 1.369 del script (🔍 el script vería una población recortada).
+6. **Cuarta vía para el superior, toda en SQL, sin conteos:** subir por `mgr_id` nivel por nivel y quedarse con el
+   **primer ancestro que tiene cuenta *Leader*** (la tabla `users` como referencia, igual que el otro DM, pero sin
+   Excel). Joins de igualdad: corre en segundos. La variante con `LIKE` sobre `tree_path` cruzando 1.401 × 2.319 hizo
+   *timeout* en Querious (15 s).
+   ```sql
+   select b.username as below_user, b.emp_id as below_id,
+          coalesce(l1.emp_id,l2.emp_id,l3.emp_id,l4.emp_id,l5.emp_id,
+                   l6.emp_id,l7.emp_id,l8.emp_id,l9.emp_id,l10.emp_id) as sup_id,
+          case when l1.emp_id is not null then l1.view_disp when l2.emp_id is not null then l2.view_disp
+               when l3.emp_id is not null then l3.view_disp when l4.emp_id is not null then l4.view_disp
+               when l5.emp_id is not null then l5.view_disp when l6.emp_id is not null then l6.view_disp
+               when l7.emp_id is not null then l7.view_disp when l8.emp_id is not null then l8.view_disp
+               when l9.emp_id is not null then l9.view_disp when l10.emp_id is not null then l10.view_disp end as sup_view_disp
+   from users b
+   join managers_tree t0 on t0.emp_id = b.emp_id
+   left join managers_tree t1  on t1.emp_id  = t0.mgr_id left join users l1  on l1.emp_id  = t1.emp_id  and l1.status  = '<Leader>'
+   left join managers_tree t2  on t2.emp_id  = t1.mgr_id left join users l2  on l2.emp_id  = t2.emp_id  and l2.status  = '<Leader>'
+   -- … igual hasta t10 / l10 (tantos saltos como max(deepness) − 1)
+   where b.status = '<Below>';
+   ```
+   Control a mano en un caso: con `niveles = 1`, `sup_id` es el **penúltimo** ID del `tree_path`. `view_disp` sale
+   de la cuenta *Leader* del superior (sin concatenar nombres ni escapar apóstrofos).
+7. **Escritura:** el `UPDATE … JOIN` con esa query adentro (y `DISTINCT` para que MySQL materialice) + `SET
+   emp_id_view, view_disp` `WHERE u.status = '<Below>'`; después `UPDATE users SET sso_id = emp_id WHERE status in
+   (…) AND emp_id NOT LIKE 'Test%'` (cuentas de prueba del PM, con emp_id no numérico, afuera). **No se pudo correr
+   desde DelOps** (§ services-os, *Database Tools* no actualiza `users`; Querious de solo lectura): lo corrió alguien
+   del equipo con escritura, a pedido por Slack.
+8. **Verificación:** *below* con vista propia = 0; *below* cuya vista no es una cuenta *Leader* = 0; *Leader* con
+   vista propia = 2.319; `sso_id = emp_id` = 3.720; total de `users` sin cambios; cuentas de prueba sin tocar.
+9. ***Quality and Integrity Checks*, solo *Users*:** *"only has N questions that will be shown"* es la lista de
+   **menos de 10 preguntas** (5 *Leader* de equipos chicos, por supresión por pregunta); *"blank email"* = exactamente
+   las cuentas sin email del mensaje de *Add Users*. **Antes de informar, clasificar cada alerta por status**: casi
+   todas eran de cuentas `hr` / `comprate` preexistentes (vistas armadas a mano a no-managers, 0 preguntas). Esas van
+   al PM **aparte**, como FYI, sin tocarlas.
 
 #### Lo que se dijo de paso (09/10)
 
@@ -2411,7 +2487,7 @@ preguntó al PM por chat: **completions**.
   cliente** — en ese era *Direct Supervisor*) · **formato del username** · **base: respondents o
   completed** → ***Save***.
 - Resultado: los usuarios en la tabla **`users`** con ese status, y sus claves en la tabla de
-  **contraseñas temporales** (🔍 `temp_passwords`).
+  **contraseñas temporales** (✅ `temp_passwords`, medido el 29/10: crece igual que `users` en cada pasada).
 - **La vista de cada manager es él mismo**: ve a toda su jerarquía. En la tabla, *view display* = su
   nombre y `emp_id_view` = su emp_id.
 - Alternativa del lado del PM: una **planilla de carga de usuarios con demográficos** que suben ellos;

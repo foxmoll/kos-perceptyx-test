@@ -61,7 +61,7 @@ Lo que Delivery Ops usa y toca. Cómo se combinan en cada tarea está en
 de producción; Jackie lo está mirando.~~ SUPERSEDED 06/10: Ignacio **ya tiene permisos de escritura**
 (📣 Ignacio). Si vuelve a aparecer `command denied`, el backup sale igual por Operations Tools ›
 Utilities. ✅ **23/10/2026:** `INSERT command denied` en la conexión RW de **EU** (import de un late add). 🔍 El permiso
-de escritura del 06/10 sería solo de US, o por servidor: pedido a Jackie. ~~🔍 solo de US~~ SUPERSEDED (29/10/2026): 📣 Ignacio, **en Querious no tiene escritura ni en EU ni en US; en SOS › Database Tools sí, en los dos.** Las escrituras van por SOS (*Preview change* hace backup de cada fila y tiene Undo, [[Perceptyx/services-os|services-os]] § Lectura o escritura); los backups manuales, por *Operations Tools › Utilities*. Las credenciales de la conexión read-write están en el chat
+de escritura del 06/10 sería solo de US, o por servidor: pedido a Jackie. ~~🔍 solo de US~~ SUPERSEDED (29/10/2026): 📣 Ignacio, **en Querious no tiene escritura ni en EU ni en US; en SOS › Database Tools sí, en los dos.** ✅ 30/10: `show grants for current_user()` en la conexión *EU RW* devuelve `GRANT SELECT ON *.* TO imoll@%`; Jackie dice que en EU hay un login de lectura y otro de escritura (abierta en [[Perceptyx/_indice|_indice]] § Preguntas abiertas). Ese chequeo es la forma rápida de saber qué permite un login. Las escrituras van por SOS (*Preview change* hace backup de cada fila y tiene Undo, [[Perceptyx/services-os|services-os]] § Lectura o escritura); los backups manuales, por *Operations Tools › Utilities*. Las credenciales de la conexión read-write están en el chat
 de Jackie — **no se copian al vault**.
 
 ### URLs de trabajo

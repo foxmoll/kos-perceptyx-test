@@ -7,6 +7,36 @@ Cuando algo de acá cambia, no se borra: se marca `SUPERSEDED (fecha)` y se enla
 
 ---
 
+## 2026-10-29/30 — Usuarios manager con status propios, SSO = emp_id e informe de integridad (tarea 827284, LEB EU, cerrado)
+
+Tarea *PFS: Creates Custom Hierarchy Based Users*, trabajada paso a paso por Ignacio con Claude. ~24.000 personas,
+árbol de 3.720 managers y 11 niveles. Cliente y personas omitidos. Procedimiento completo en
+[[Perceptyx/procedimientos#Cómo se resolvió el 29–30/10 (tarea 827284 — status con nombre propio, SSO = emp_id, sin `get-mgr-counts`)|procedimientos § 827284]].
+
+- ✅ **Resultado:** *Add Users* en dos pasadas, 2.319 *Leader* (`mgr`) + 1.401 *Leader below threshold*
+  (`mgr_below_min_n`) = 3.720 managers del árbol, todas inactivas; *below* apuntadas al primer ancestro con cuenta
+  *Leader* (los 1.401 resolvieron); SSO ID = emp_id. 53 sin email. *Q&I* (*Users*): 5 *Leader* ven menos de 10
+  preguntas; las demás alertas eran de cuentas `hr` preexistentes, informadas aparte.
+- ✅ **Cerró la tensión activos/inactivos para este caso:** *Add Users* crea **inactivas**.
+- ✅ ***Conflict detected* cuenta por `emp_id_view`** (otra cuenta que ya ve ese nodo, sea de quien sea). Con
+  "retain duplicates", Create.
+- ✅ **Las claves van a `temp_passwords`**, no a `password_history`.
+- ✅ ***Settings › Upload Managers* (CEO + archivo) y *Add Users* son herramientas distintas** en la misma pantalla.
+- ⚠️ ✅ **`get-mgr-counts` devolvió 115 de 3.720 managers.** El control pasó a ser `count(distinct mgr_id)` del árbol
+  y un muestreo del borde por SQL (4 → sin cuenta, 5 → *Leader*). Pregunta abierta en [[Perceptyx/_indice|_indice]].
+- ✅ **Cuarta vía para el superior**, en SQL por cadena de `mgr_id`, sin conteos ni Excel. La de `LIKE` hizo timeout.
+- ✅ **SOS › Database Tools › Update**: una tabla por sentencia, no lee `\'`, y **no actualiza `users`** por el
+  `ON UPDATE CASCADE` de `user_privileges` ([[Perceptyx/services-os|services-os]] § Lectura o escritura).
+- ✅ **Querious de Ignacio: `GRANT SELECT ON *.*`** aunque la conexión se llame "EU RW". 📣 Jackie (Slack, 29/10): en EU
+  debería tener escritura, con un login aparte. Los dos `UPDATE` los corrió otra persona del equipo el 30/10;
+  verificados después (0 *below* con vista propia, 3.720 con SSO).
+- Errores del operador, para no repetir: (1) dio por bueno el archivo de `get-mgr-counts` sin chequear su tamaño
+  contra el árbol; el primer control tendría que haber sido `count(distinct mgr_id)`. (2) Leyó el "RW" del nombre de
+  la pestaña por encima de la ficha de Ignacio, que decía solo lectura. (3) Puso en un mensaje para el PM una cifra
+  que no se había medido; se marcó antes de mandarlo, pero no tendría que haber entrado.
+
+---
+
 ## 2026-10-29 — Thank you page en inglés en todos los idiomas (LEB EU, en vivo, DC Amsterdam)
 
 Ticket del cliente: *"Thank you text comes up in English for all languages"*; dijo que intentó corregirlo él mismo.

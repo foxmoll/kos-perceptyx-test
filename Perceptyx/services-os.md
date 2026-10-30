@@ -62,6 +62,17 @@ Undo."* Un `INSERT` de 3 filas en `prefill_data` entró con *Preview change* cua
 para confirmar. Si el `WHERE` no encuentra nada, no deja correr (*"matches 0 rows"*). En `resp_list` avisa que
 **reconstruye el *survey setup file*** después del cambio.
 Lo de *"solo lectura"* de abajo queda `SUPERSEDED (23/10/2026)` para escrituras: 🔍 no se sabe desde cuándo.
+✅ **Límites de *Update* vistos el 29/10/2026** (app LEB EU, tarea de usuarios manager —
+[[Perceptyx/procedimientos#Cómo se resolvió el 29–30/10 (tarea 827284 — status con nombre propio, SSO = emp_id, sin `get-mgr-counts`)|procedimientos § 827284]]):
+- **Una tabla por sentencia:** un `UPDATE … JOIN` da *"Unsupported statement. DB Tools runs SELECT, INSERT, UPDATE,
+  DELETE, CREATE TABLE, ALTER TABLE and DROP TABLE — one table at a time."* (`CREATE TABLE` sí figura: lo de Jackie
+  del 08/10, abajo, quedó viejo en eso).
+- **No lee el escape con barra** (`\'`, el que genera `QUOTE()`): da *"couldn't read this query (an unclosed
+  quote?)"*. Escapar duplicando el apóstrofo (`''`).
+- **No actualiza `users`** cuando otra tabla tiene una clave foránea hacia ella con `ON UPDATE CASCADE` (en ese app,
+  `user_privileges`): *"DB Tools backs up and undoes only users itself, so it won't run this. Ask an engineer."* Lo
+  bloquea aunque el `UPDATE` no toque la columna referenciada.
+- La pestaña de consultas acepta solo sentencias que empiezan con `SELECT` (un `WITH … SELECT` se rechaza).
 
 ✅ **Database Tools en uso (call de Jackie, 08/10):** un `CREATE TABLE` devuelve ***"Only select queries
 are permitted in this interface"***; devuelve **como máximo 10.000 filas** (una tabla de ~12.000 llegó
